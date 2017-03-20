@@ -7,7 +7,7 @@ Ich als...
 * <b>Nutzer</b> möchte Profile auswählen, um mehr über Personen zu erfahren
 * <b>Nutzer</b> möchte mich anmelden, um mein Profil bearbeiten und aufrufen zu können
 * <b>Nutzer</b> möchte das Profil löschen können, um Datenschutz zu gewährleisten
-### Nicht funktional
+### nicht funktional
 Ich als...
 * <b>Nutzer</b> möchte, dass Kontakte gespeichert werden, um sie schnell wiederzufinden
 * <b>Nutzer</b> möchte von Unbekannten Profilen Anfragen bekommen, um die Möglichkeit zu haben, sich zu entscheiden
@@ -34,15 +34,18 @@ Ich als...
 ### funktional
 Ich als...
 * <b>Nutzer</b> möchte Nachrichten bearbeiten, um Fehler zu korrigieren
+* <b>Nutzer</b> möchte eine Statusfunktion haben, um anderen Usern mitzuteilen ob ich erreichbar bin
 
 ### nicht funktional
 Ich als...
 * <b>Nutzer</b> möchte einen Sprachfilter haben, um vor vulgären Ausdrücken geschützt zu sein
+* <b>Nutzer</b> möchte einen Spamfilter haben, um nicht gestört oder genervt zu werden
+* <b>Nutzer</b> möchte automatisch eingeloggt werden, um Zeit zu sparen
+* <b>Nutzer</b> möchte, dass meine Kontakte sortiert werden, um Zeit zu sparen
   
-  * <b>Nutzer</b> möchte einen Spamfilter haben, um nicht gestört oder genervt zu werden +
-  * <b>Nutzer</b> möchte eine Statusfunktion haben, um anderen Usern mitzuteilen ob ich erreichbar bin +
-  * <b>Nutzer</b> möchte automatisch eingeloggt werden, um Zeit zu sparen +
-  * <b>Nutzer</b> möchte, dass meine Kontakte sortiert werden, um Zeit zu sparen +
+ 
+ 
+  
   
   
   
