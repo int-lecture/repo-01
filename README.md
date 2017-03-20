@@ -1,7 +1,7 @@
 # repo-01
 Ich als...
   * <b>Nutzer</b> möchte Kontakte auswählen, um mit ihnen chatten zu können
-  * <b>Nutzer</b> möchte Profile auswählen, um mehr über meine Kontakte zu erfahren
+  * <b>Nutzer</b> möchte Profile auswählen, um mehr über Personen zu erfahren
   * <b>Nutzer</b> möchte, dass der Chatverlauf gespeichert wird, um frühere Nachrichten lesen zu können
   * <b>Nutzer</b> möchte Nachrichten bearbeiten, um Fehler zu korrigieren
   * <b>Nutzer</b> möchte mehrere Kontakte auswählen, um mit ihnen innerhalb einer Gruppe zu chatten
