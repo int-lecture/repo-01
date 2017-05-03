@@ -84,7 +84,7 @@ class Message implements Serializable
     	text = message.getString("text");
     }
 
-    private String getDate()
+    public String getDate()
     {
     	return new SimpleDateFormat(ISO8601).format(date);
     }
@@ -102,6 +102,11 @@ class Message implements Serializable
     public int getSequence()
     {
     	return sequence;
+    }
+
+    public void setSequence(int sequenece)
+    {
+    	this.sequence = sequence;
     }
 
     /**

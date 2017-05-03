@@ -118,8 +118,13 @@ public class ChatServer
 			Message[] message = new Message[1];
 			message[0] = new Message(new JSONObject(msg));
 			String fileName = message[0].getTo() + ".txt";
+			message[0].setSequence(getUserSequence(fileName) + 1);
 			writeToFile(fileName, message);
-			return Response.status(Response.Status.CREATED).entity("").build();
+
+			JSONObject obj = new JSONObject();
+			obj.put("date", message[0].getDate());
+			obj.put("sequence", message[0].getSequence());
+			return Response.status(Response.Status.CREATED).entity(obj).build();
 		}
 		catch (Exception e)
 		{
@@ -238,5 +243,45 @@ public class ChatServer
 		}
 
 		outStream.close();
+	}
+
+	/**
+	 * Returns the last sequence number of a user's stored messages or 0 if there are none.
+	 * @param fileName		The name of the file.
+	 * @return				The last sequence number or 0 if the file doesn't exist.
+	 * @throws IOException	Thrown when the file can't be read.
+	 */
+	private int getUserSequence(String fileName) throws IOException
+	{
+		File file = new File(fileName);
+
+		if (file.exists())
+		{
+			byte[] countBytes = new byte[4];
+			FileInputStream inStream = new FileInputStream(fileName);
+			inStream.read(countBytes, 0, 4);
+			int count = ByteBuffer.wrap(countBytes).getInt();
+			byte[][] messageBytes = new byte[count][];
+			Message[] messages = new Message[count];
+
+			for (int i = 0; i < count; i++)
+			{
+				byte[] messageLengthBytes = new byte[4];
+				inStream.read(messageLengthBytes, 0, 4);
+				int messageLength = ByteBuffer.wrap(messageLengthBytes).getInt();
+				messageBytes[i] = new byte[messageLength];
+				inStream.read(messageBytes[i], 0, messageLength);
+
+				messages[i] = Message.Deserialize(messageBytes[i]);
+			}
+
+			inStream.close();
+
+			return messages[messages.length - 1].getSequence();
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
