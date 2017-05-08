@@ -22,7 +22,8 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
  * @author Christopher Rotter, Nico Gensheimer, Raphael Lubaschewski
  */
 @Path("")
-public class ChatServer {
+public class ChatServer
+{
 	private static HashMap<String, Integer>  sequenceNumber= new HashMap<>();
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
@@ -265,39 +266,5 @@ public class ChatServer {
 			sequenceNumber.put(name, 1);
 			return 0;
 		}
-
-
-
-
-//		File file = new File(fileName);
-//
-//		if (file.exists())
-//		{
-//			byte[] countBytes = new byte[4];
-//			FileInputStream inStream = new FileInputStream(fileName);
-//			inStream.read(countBytes, 0, 4);
-//			int count = ByteBuffer.wrap(countBytes).getInt();
-//			byte[][] messageBytes = new byte[count][];
-//			Message[] messages = new Message[count];
-//
-//			for (int i = 0; i < count; i++)
-//			{
-//				byte[] messageLengthBytes = new byte[4];
-//				inStream.read(messageLengthBytes, 0, 4);
-//				int messageLength = ByteBuffer.wrap(messageLengthBytes).getInt();
-//				messageBytes[i] = new byte[messageLength];
-//				inStream.read(messageBytes[i], 0, messageLength);
-//
-//				messages[i] = Message.Deserialize(messageBytes[i]);
-//			}
-//
-//			inStream.close();
-//
-//			return messages[messages.length - 1].getSequence();
-//		}
-//		else
-//		{
-//			return 0;
-//		}
 	}
 }
