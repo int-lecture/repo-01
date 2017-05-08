@@ -22,8 +22,9 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
  * @author Christopher Rotter, Nico Gensheimer, Raphael Lubaschewski
  */
 @Path("")
-public class ChatServer
-{
+public class ChatServer {
+	private static HashMap<String, Integer>  sequenceNumber= new HashMap<>();
+
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
 		final String baseUri = "http://localhost:5000/";
@@ -33,8 +34,8 @@ public class ChatServer
 
 		System.out.println("Starte grizzly...");
 		SelectorThread threadSelector = GrizzlyWebContainerFactory.create(baseUri, initParams);
-		System.out.printf("Grizzly läuft unter %s%n", baseUri);
-		System.out.println("[ENTER] drücken, um Grizzly zu beenden");
+		System.out.printf("Grizzly lÃ¤uft unter %s%n", baseUri);
+		System.out.println("[ENTER] drÃ¼cken, um Grizzly zu beenden");
 		System.in.read();
 		threadSelector.stopEndpoint();
 		System.out.println("Grizzly wurde beendet");
@@ -118,7 +119,7 @@ public class ChatServer
 			Message[] message = new Message[1];
 			message[0] = new Message(new JSONObject(msg));
 			String fileName = message[0].getTo() + ".txt";
-			message[0].setSequence(getUserSequence(fileName) + 1);
+			message[0].setSequence(getUserSequence(fileName));
 			writeToFile(fileName, message);
 
 			JSONObject obj = new JSONObject();
@@ -251,37 +252,52 @@ public class ChatServer
 	 * @return				The last sequence number or 0 if the file doesn't exist.
 	 * @throws IOException	Thrown when the file can't be read.
 	 */
-	private int getUserSequence(String fileName) throws IOException
+	private int getUserSequence(String name) throws IOException
 	{
-		File file = new File(fileName);
-
-		if (file.exists())
+		if(sequenceNumber.containsKey(name))
 		{
-			byte[] countBytes = new byte[4];
-			FileInputStream inStream = new FileInputStream(fileName);
-			inStream.read(countBytes, 0, 4);
-			int count = ByteBuffer.wrap(countBytes).getInt();
-			byte[][] messageBytes = new byte[count][];
-			Message[] messages = new Message[count];
-
-			for (int i = 0; i < count; i++)
-			{
-				byte[] messageLengthBytes = new byte[4];
-				inStream.read(messageLengthBytes, 0, 4);
-				int messageLength = ByteBuffer.wrap(messageLengthBytes).getInt();
-				messageBytes[i] = new byte[messageLength];
-				inStream.read(messageBytes[i], 0, messageLength);
-
-				messages[i] = Message.Deserialize(messageBytes[i]);
-			}
-
-			inStream.close();
-
-			return messages[messages.length - 1].getSequence();
+			int seq = sequenceNumber.get(name);
+			sequenceNumber.put(name, seq + 1);
+			return seq;
 		}
 		else
 		{
+			sequenceNumber.put(name, 1);
 			return 0;
 		}
+
+
+
+
+//		File file = new File(fileName);
+//
+//		if (file.exists())
+//		{
+//			byte[] countBytes = new byte[4];
+//			FileInputStream inStream = new FileInputStream(fileName);
+//			inStream.read(countBytes, 0, 4);
+//			int count = ByteBuffer.wrap(countBytes).getInt();
+//			byte[][] messageBytes = new byte[count][];
+//			Message[] messages = new Message[count];
+//
+//			for (int i = 0; i < count; i++)
+//			{
+//				byte[] messageLengthBytes = new byte[4];
+//				inStream.read(messageLengthBytes, 0, 4);
+//				int messageLength = ByteBuffer.wrap(messageLengthBytes).getInt();
+//				messageBytes[i] = new byte[messageLength];
+//				inStream.read(messageBytes[i], 0, messageLength);
+//
+//				messages[i] = Message.Deserialize(messageBytes[i]);
+//			}
+//
+//			inStream.close();
+//
+//			return messages[messages.length - 1].getSequence();
+//		}
+//		else
+//		{
+//			return 0;
+//		}
 	}
 }

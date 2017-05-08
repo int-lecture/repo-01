@@ -104,7 +104,7 @@ class Message implements Serializable
     	return sequence;
     }
 
-    public void setSequence(int sequenece)
+    public void setSequence(int sequence)
     {
     	this.sequence = sequence;
     }
