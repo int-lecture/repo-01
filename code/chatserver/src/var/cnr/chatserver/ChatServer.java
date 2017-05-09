@@ -135,7 +135,7 @@ public class ChatServer
 			JSONObject obj = new JSONObject();
 			obj.put("date", message.getDate());
 			obj.put("sequence", message.getSequence());
-			return Response.status(Response.Status.CREATED).entity(obj).build();
+			return Response.status(Response.Status.CREATED).entity(obj.toString()).build();
 		}
 		catch (Exception e)
 		{
