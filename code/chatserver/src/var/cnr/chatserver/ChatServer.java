@@ -2,16 +2,12 @@ package var.cnr.chatserver;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jackson.*;
 import org.codehaus.jettison.json.*;
 
 import com.sun.grizzly.http.SelectorThread;
@@ -24,7 +20,10 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 @Path("")
 public class ChatServer
 {
-	private static HashMap<String, Integer>  sequenceNumber= new HashMap<>();
+	/**
+	 * Contains the last sequence number for all users.
+	 */
+	private static HashMap<String, Integer>  userSequenceNumbers = new HashMap<>();
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
@@ -53,13 +52,12 @@ public class ChatServer
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessages(@PathParam("user_id") String userId)
 	{
-
 		return getMessages(userId, null);
 	}
 
 	/**
-	 * Retrieves all available messages for a user with a sequence number greater than the parameter sequenceNumber,
-	 * sends them to the client and deletes them.
+	 * Retrieves all available messages for a user, sends them to the client and deletes those with a sequence number 
+	 * lower than or equal to the parameter sequenceNumber.
 	 * @param userId			The user ID of the user.
 	 * @param sequenceNumber	The number of the message that the client received last.
 	 * @return					A HTTP response with all available messages in JSON format attached.
@@ -85,21 +83,33 @@ public class ChatServer
 			return Response.status(Response.Status.NO_CONTENT).build();
 		}
 
-		Message[] unreadMessages;
+		Message[] unconfirmedMessages;
 
 		if (sequenceNumber != null)
 		{
-			int sequence = Integer.parseInt(sequenceNumber);
-			int unread = messages[messages.length - 1].getSequence() - sequence;
-			unreadMessages = new Message[unread];
-			System.arraycopy(messages, messages.length - unread, unreadMessages, 0, unread);
+			int unconfirmed = messages[messages.length - 1].getSequence() - Integer.parseInt(sequenceNumber);
+			unconfirmedMessages = new Message[unconfirmed];
+			
+			for (int i = 0; i < unconfirmedMessages.length; i++)
+			{
+				unconfirmedMessages[i] = messages[messages.length - unconfirmedMessages.length + i];
+			}
 		}
 		else
 		{
-			unreadMessages = messages;
+			unconfirmedMessages = messages;
 		}
-
-		return Response.status(Response.Status.OK).entity(messagesToJSONArray(unreadMessages).toString()).build();
+		
+		try 
+		{
+			writeToFile(userId, unconfirmedMessages);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return Response.status(Response.Status.OK).entity(messagesToJSONArray(messages).toString()).build();
 	}
 
 
@@ -117,15 +127,14 @@ public class ChatServer
 	{
 		try
 		{
-			Message[] message = new Message[1];
-			message[0] = new Message(new JSONObject(msg));
-			String fileName = message[0].getTo() + ".txt";
-			message[0].setSequence(getUserSequence(fileName));
+			Message message = new Message(new JSONObject(msg));
+			String fileName = message.getTo() + ".txt";
+			message.setSequence(increaseUserSequence(fileName));
 			writeToFile(fileName, message);
 
 			JSONObject obj = new JSONObject();
-			obj.put("date", message[0].getDate());
-			obj.put("sequence", message[0].getSequence());
+			obj.put("date", message.getDate());
+			obj.put("sequence", message.getSequence());
 			return Response.status(Response.Status.CREATED).entity(obj).build();
 		}
 		catch (Exception e)
@@ -206,7 +215,7 @@ public class ChatServer
 	 * @param messages		An array of messages.
 	 * @throws IOException	Thrown when the file can't be written.
 	 */
-	private void writeToFile(String fileName, Message[] messages) throws IOException
+	private void writeToFile(String fileName, Message... messages) throws IOException
 	{
 
 		File file = new File(fileName);
@@ -248,22 +257,21 @@ public class ChatServer
 	}
 
 	/**
-	 * Returns the last sequence number of a user's stored messages or 0 if there are none.
-	 * @param fileName		The name of the file.
-	 * @return				The last sequence number or 0 if the file doesn't exist.
-	 * @throws IOException	Thrown when the file can't be read.
+	 * Increases the sequence number of a user and returns the previous sequence number.
+	 * @param userId		The id of the user.
+	 * @return				The last sequence number.
 	 */
-	private int getUserSequence(String name) throws IOException
+	private int increaseUserSequence(String userId)
 	{
-		if(sequenceNumber.containsKey(name))
+		if (userSequenceNumbers.containsKey(userId))
 		{
-			int seq = sequenceNumber.get(name);
-			sequenceNumber.put(name, seq + 1);
+			int seq = userSequenceNumbers.get(userId);
+			userSequenceNumbers.put(userId, seq + 1);
 			return seq;
 		}
 		else
 		{
-			sequenceNumber.put(name, 1);
+			userSequenceNumbers.put(userId, 1);
 			return 0;
 		}
 	}
