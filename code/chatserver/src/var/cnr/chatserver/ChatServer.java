@@ -127,6 +127,7 @@ public class ChatServer
 	{
 		try
 		{
+			System.out.println(msg);
 			Message message = new Message(new JSONObject(msg));
 			String fileName = message.getTo() + ".txt";
 			message.setSequence(increaseUserSequence(fileName));
