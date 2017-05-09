@@ -24,7 +24,7 @@ public class RegistrationServer {
 
 		public static void main(String[] args) throws IllegalArgumentException, IOException
 		{
-			
+
 			final String baseUri = "http://localhost:5002/";
 			final String packageName = "var.cnr.registrationserver";
 			final Map<String, String> initParams = new HashMap<String, String>();
@@ -43,8 +43,8 @@ public class RegistrationServer {
 
 		HashMap<String,String> userPseudoHashMap = new HashMap<>();
 		HashMap<String,String> userPasswordHashMap = new HashMap<>();
-		
-		
+
+
 
 		@PUT
 		@Path("/register")
@@ -52,17 +52,17 @@ public class RegistrationServer {
 		@Consumes(MediaType.APPLICATION_JSON)
 		public Response register(String profil){
 
-			
-//			zu testzwecken
+
+//			zu testzwecken!
 //			String profiltest = "{ \"user\": \"glatzo\", \"pseudonym\": \"glatze\", \"password\": \"123\"}";
-			
+
 			try {
 				JSONObject jsnobj = new JSONObject(profil);
 				String user = (String) jsnobj.get("user");
 				String pseudonym = (String) jsnobj.get("pseudonym");
 				String password = (String) jsnobj.get("password");
 				boolean contains = false;
-				
+
 				  for(String key : userPseudoHashMap.keySet())
 				    {
 					  if (key.contains(user)) {
@@ -70,15 +70,15 @@ public class RegistrationServer {
 						  if (userPseudoHashMap.get(key).contains(pseudonym)) {
 							  contains = true;
 						}
-					
+
 					}
-				      
+
 				    }
 				  if (!contains) {
 					  userPasswordHashMap.put(user, password);
 					  userPseudoHashMap.put(user, pseudonym);
 				}
-						
+
 				return Response.status(Response.Status.OK).build();
 			} catch (Exception e) {
 				// TODO: handle exception
