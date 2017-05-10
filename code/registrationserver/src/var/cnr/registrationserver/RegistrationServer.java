@@ -1,10 +1,11 @@
-package var.cnr.regeistrationserver;
+package var.cnr.registrationserver;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -57,6 +58,7 @@ public class RegistrationServer {
 //			String profiltest = "{ \"user\": \"glatzo\", \"pseudonym\": \"glatze\", \"password\": \"123\"}";
 
 			try {
+				
 				JSONObject jsnobj = new JSONObject(profil);
 				String user = (String) jsnobj.get("user");
 				String pseudonym = (String) jsnobj.get("pseudonym");
@@ -77,20 +79,51 @@ public class RegistrationServer {
 				  if (!contains) {
 					  userPasswordHashMap.put(user, password);
 					  userPseudoHashMap.put(user, pseudonym);
+				}else{
+					
+					//Hier sollte der Statuscode I´m a Teapot 418 gesendet werden laut Aufgabe
+					return Response.status(Response.Status.FORBIDDEN).build();
 				}
-
-				return Response.status(Response.Status.OK).build();
+				  
+				  //Erstelleung des JSON Objekts mit der "Success" Nachricht an den Client
+				  JSONObject successJsonObj = new JSONObject();
+				  successJsonObj.put("success", "true");
+				  
+				return Response.status(Response.Status.OK).entity(successJsonObj).build();
 			} catch (Exception e) {
-				// TODO: handle exception
+				return Response.status(Response.Status.BAD_REQUEST).build();
 			}
-			return null;
+		
 
 
 		}
 
-
-
+		@POST
+		@Path("/profile")
+		@Produces(MediaType.APPLICATION_JSON)
+		@Consumes(MediaType.APPLICATION_JSON)
+		public Response profileRequest(String profil){
+			
+			try {
+				JSONObject jsonObj = new JSONObject(profil);
+				//Auswertung des JsonStrings von dem Wert getownprofile
+				//muss dann mit dem DB eintrag abgeglichen werden.
+//				String ownprofile = jsonObj.get(getownprofile);
+				
+				JSONObject profilJsonObj = new JSONObject();
+				
+				
+				//Hier müssen dann die Daten aus der DB gezogen werden (name, email, contact)
+//				profilJsonObj.put(key, value)
+				return Response.status(Response.Status.OK).entity(profilJsonObj).build();
+				 
+			} catch (Exception e) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			}
 		}
+		}
+
+		
 
 
 
