@@ -23,7 +23,12 @@ public class ChatServer
 	/**
 	 * Contains the last sequence number for all users.
 	 */
-	private static HashMap<String, Integer>  userSequenceNumbers = new HashMap<>();
+	private static volatile HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
+
+	/**
+	 * The thread lock is used to prevent inconsistent file access through multiple threads.
+	 */
+	private static Object threadLock = new Object();
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
@@ -56,7 +61,7 @@ public class ChatServer
 	}
 
 	/**
-	 * Retrieves all available messages for a user, sends them to the client and deletes those with a sequence number 
+	 * Retrieves all available messages for a user, sends them to the client and deletes those with a sequence number
 	 * lower than or equal to the parameter sequenceNumber.
 	 * @param userId			The user ID of the user.
 	 * @param sequenceNumber	The number of the message that the client received last.
@@ -71,7 +76,10 @@ public class ChatServer
 
 		try
 		{
-			messages = readFile(userId + ".txt");
+			synchronized (threadLock)
+			{
+				messages = readFile(userId + ".txt");
+			}
 
 			if (messages == null)
 			{
@@ -89,7 +97,7 @@ public class ChatServer
 		{
 			int unconfirmed = messages[messages.length - 1].getSequence() - Integer.parseInt(sequenceNumber);
 			unconfirmedMessages = new Message[unconfirmed];
-			
+
 			for (int i = 0; i < unconfirmedMessages.length; i++)
 			{
 				unconfirmedMessages[i] = messages[messages.length - unconfirmedMessages.length + i];
@@ -99,16 +107,19 @@ public class ChatServer
 		{
 			unconfirmedMessages = messages;
 		}
-		
-		try 
+
+		try
 		{
-			writeToFile(userId, unconfirmedMessages);
-		} 
-		catch (IOException e) 
+			synchronized (threadLock)
+			{
+				writeToFile(userId, unconfirmedMessages);
+			}
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		return Response.status(Response.Status.OK).entity(messagesToJSONArray(messages).toString()).build();
 	}
 
@@ -116,22 +127,28 @@ public class ChatServer
 	/**
 	 * Stores the message in a file so the chat partner can retrieve it. If the message was in correct format,
 	 * the server will answer with HTTP code 201, the message's sequence number and the server time, in JSON format.
-	 * @param msg	The message for the chat partner, in JSON format.
-	 * @return		A HTTP response.
+	 * @param request	The message for the chat partner, in JSON format.
+	 * @return			A HTTP response.
 	 */
 	@PUT
 	@Path("/send")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendMessage(String msg)
+	public Response sendMessage(String request)
 	{
 		try
 		{
-			System.out.println(msg);
-			Message message = new Message(new JSONObject(msg));
+			JSONObject jsonRequest = new JSONObject(request);
+			String token = jsonRequest.getString("token");
+
+			Message message = new Message(jsonRequest);
 			String fileName = message.getTo() + ".txt";
 			message.setSequence(increaseUserSequence(fileName));
-			writeToFile(fileName, message);
+
+			synchronized (threadLock)
+			{
+				writeToFile(fileName, message);
+			}
 
 			JSONObject obj = new JSONObject();
 			obj.put("date", message.getDate());
@@ -262,7 +279,7 @@ public class ChatServer
 	 * @param userId		The id of the user.
 	 * @return				The last sequence number.
 	 */
-	private int increaseUserSequence(String userId)
+	private synchronized int increaseUserSequence(String userId)
 	{
 		if (userSequenceNumbers.containsKey(userId))
 		{
