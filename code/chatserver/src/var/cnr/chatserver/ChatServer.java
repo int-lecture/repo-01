@@ -2,6 +2,7 @@ package var.cnr.chatserver;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.ws.rs.*;
@@ -24,6 +25,8 @@ public class ChatServer
 	 * Contains the last sequence number for all users.
 	 */
 	private static volatile HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
+
+	private static HashMap<String, Token> userTokens = new HashMap();
 
 	/**
 	 * The thread lock is used to prevent inconsistent file access through multiple threads.
@@ -140,10 +143,14 @@ public class ChatServer
 		{
 			JSONObject jsonRequest = new JSONObject(request);
 			String token = jsonRequest.getString("token");
-
 			Message message = new Message(jsonRequest);
 			String fileName = message.getTo() + ".txt";
 			message.setSequence(increaseUserSequence(fileName));
+
+			if (!validateToken(token, message.getFrom()))
+			{
+				return Response.status(Response.Status.UNAUTHORIZED).build();
+			}
 
 			synchronized (threadLock)
 			{
@@ -159,6 +166,21 @@ public class ChatServer
 		{
 			e.printStackTrace();
 			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+
+	private synchronized boolean validateToken(String token, String nickname)
+	{
+		Token userToken = userTokens.get(nickname);
+		Date now = new Date();
+
+		if (token.equals(userToken.getValue()) && now.before(userToken.getExpireDate()))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
