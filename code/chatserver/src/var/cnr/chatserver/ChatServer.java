@@ -2,16 +2,23 @@ package var.cnr.chatserver;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.*;
 
 import com.sun.grizzly.http.SelectorThread;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 
 /**
@@ -24,9 +31,7 @@ public class ChatServer
 	/**
 	 * Contains the last sequence number for all users.
 	 */
-	private static volatile HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
-
-	private static HashMap<String, Token> userTokens = new HashMap();
+	private static HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
 
 	/**
 	 * The thread lock is used to prevent inconsistent file access through multiple threads.
@@ -58,9 +63,9 @@ public class ChatServer
 	@GET
 	@Path("/messages/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMessages(@PathParam("user_id") String userId)
+	public Response getMessages(@PathParam("user_id") String userId, @Context HttpHeaders header)
 	{
-		return getMessages(userId, null);
+		return getMessages(userId, null, header);
 	}
 
 	/**
@@ -73,8 +78,16 @@ public class ChatServer
 	@GET
 	@Path("/messages/{user_id}/{sequene_number}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMessages(@PathParam("user_id") String userId, @PathParam("sequence_number") String sequenceNumber)
+	public Response getMessages(@PathParam("user_id") String userId, @PathParam("sequence_number") String sequenceNumber, @Context HttpHeaders header)
 	{
+		MultivaluedMap<String, String> headerValues = header.getRequestHeaders();
+		String token = headerValues.getFirst("Authorization");
+
+		if (!validateToken(token, userId))
+		{
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
+
 		Message[] messages;
 
 		try
@@ -144,13 +157,14 @@ public class ChatServer
 			JSONObject jsonRequest = new JSONObject(request);
 			String token = jsonRequest.getString("token");
 			Message message = new Message(jsonRequest);
-			String fileName = message.getTo() + ".txt";
-			message.setSequence(increaseUserSequence(fileName));
 
 			if (!validateToken(token, message.getFrom()))
 			{
 				return Response.status(Response.Status.UNAUTHORIZED).build();
 			}
+
+			String fileName = message.getTo() + ".txt";
+			message.setSequence(increaseUserSequence(fileName));
 
 			synchronized (threadLock)
 			{
@@ -171,17 +185,43 @@ public class ChatServer
 
 	private synchronized boolean validateToken(String token, String nickname)
 	{
-		Token userToken = userTokens.get(nickname);
-		Date now = new Date();
+		JSONObject obj = new JSONObject();
+		try
+		{
+			obj.put("token", token);
+			obj.put("pseudonym", nickname);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
 
-		if (token.equals(userToken.getValue()) && now.before(userToken.getExpireDate()))
+		Client client = new Client();
+		WebResource webResource = client.resource("http://141.19.142.57:5001/auth");
+		ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).entity(obj).post(ClientResponse.class);
+	    int status = response.getStatus();
+	    String textEntity = response.getEntity(String.class);
+	    System.out.println(status);
+
+		if (status == 200)
 		{
-			return true;
+			try
+			{
+				JSONObject responseObj = new JSONObject(textEntity);
+				  System.out.println(responseObj.getString("expire-date"));
+
+				if (new SimpleDateFormat(Message.ISO8601).parse(responseObj.getString("expire-date")).after(new Date()))
+				{
+					return true;
+				}
+			}
+			catch (JSONException | ParseException e)
+			{
+				e.printStackTrace();
+			}
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
