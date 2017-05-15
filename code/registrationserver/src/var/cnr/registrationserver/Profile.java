@@ -3,6 +3,7 @@ package var.cnr.registrationserver;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.bson.Document;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,6 +14,10 @@ import org.codehaus.jettison.json.JSONObject;
  */
 public class Profile
 {
+	/**
+	 * The password of the user.
+	 */
+	private String password;
 	/**
 	 * The nickname of the user.
 	 */
@@ -33,10 +38,11 @@ public class Profile
 	 * @param name		The nickname of the user.
 	 * @param email		The email address of the user.
 	 */
-	public Profile(String name, String email)
+	public Profile(String name, String email, String password)
 	{
 		this.name = name;
 		this.email = email;
+		this.password = password;
 	}
 
 	public String getName()
@@ -84,6 +90,15 @@ public class Profile
     	obj.put("email", email);
     	obj.put("contact", stringArrayToJSONArray(getContacts()));
 		return obj;
+	}
+
+	public Document toDocument(){
+		Document doc = new Document()
+                .append("user", email)
+                .append("pseudonym", name)
+                .append("password", password);
+
+      return doc;
 	}
 
 	/**
