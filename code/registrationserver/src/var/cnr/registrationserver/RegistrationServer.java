@@ -33,7 +33,7 @@ import com.mongodb.client.MongoDatabase;
 import com.sun.grizzly.http.SelectorThread;
 import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 
-import mongodbTest.Message;
+
 
 /**
  * A registration server built on the RESTful API that can create and store user profiles.
@@ -41,9 +41,9 @@ import mongodbTest.Message;
  */
 public class RegistrationServer
 {
-	
-	private static final String MONGO_URL = "http://localhost:27017";
-	
+
+	private static final String MONGO_URL = "mongodb://localhost:27017";
+
 	 /** URI to the MongoDB instance. */
     private static MongoClientURI connectionString =
             new MongoClientURI(MONGO_URL);
@@ -97,9 +97,10 @@ public class RegistrationServer
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response register(String profile)
 	{
+
 		 MongoCollection<Document> collection = database.getCollection("profiles");
 		 List<Document> documents = new ArrayList<>();
-		 
+
 
 
 //			zu testzwecken!
@@ -112,16 +113,16 @@ public class RegistrationServer
 			String pseudonym = jsnobj.getString("pseudonym");
 			String password = jsnobj.getString("password");
 			String secPassword = SecurityHelper.hashPassword(password);
-			
-			
+
+
 			collection.find(and(eq("user",user),eq("pseudonym",pseudonym)))
 	         .forEach((Block<Document>) e -> documents.add(e));
 
 			if (!documents.isEmpty())
 			{
-				
+
 				collection.insertOne(new Profile(pseudonym, user, secPassword).toDocument());
-				
+
 //				nicknames.put(user, pseudonym);
 //				passwords.put(user, password);
 //				profiles.put(pseudonym, new Profile(pseudonym, user));
@@ -166,10 +167,10 @@ public class RegistrationServer
 
 			collection.find(eq("pseudonym",nickname))
 	         .forEach((Block<Document>) e -> documents.add(e));
-			
+
 			if (!documents.isEmpty())
 			{
-				
+
 				return Response.status(Response.Status.OK).entity(documentToJSONObject(documents).toString()).build();
 			}
 			else
@@ -182,34 +183,34 @@ public class RegistrationServer
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Converts the given list<document> to JSONObject and returns the Object
 	 */
 	static 	public JSONObject documentToJSONObject( List<Document> documents) {
-		
+
 		try {
 			JSONObject obj = new JSONObject();
 			  for (Document document : documents) {
 		            obj.put("user", document.getString("user"));
 		            obj.put("pseudonym", document.getString("pseudonym"));
 		            obj.put("password", document.getString("password"));
-		      		          
+
 		        }
-		
-		
+
+
 			  return obj;
-		
+
 		} catch (Exception e2) {
 			System.out.println(e2);
 			return null;
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 }
 
 
