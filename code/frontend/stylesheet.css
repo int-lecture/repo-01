@@ -19,6 +19,27 @@
     filter: invert(1);
 }
 
+
+
 .modal-header h4 {
     text-align: center;
+}
+
+#logo {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+    width: 900px;
+    height: 500px;
+
+}
+
+#sidebar {
+    height:100vh;
+    overflow-y:scroll;
+    Display: none;
+}
+
+#menu {
+    Display: none;
+
 }
