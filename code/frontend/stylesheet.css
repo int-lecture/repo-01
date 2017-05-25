@@ -40,6 +40,20 @@
 }
 
 #menu {
-    Display: none;
+    display: none;
 
 }
+
+#navtext {
+    display: none;
+}
+
+
+#input {
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     display: none;
+}
+
+

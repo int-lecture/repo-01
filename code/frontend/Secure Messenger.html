@@ -11,9 +11,9 @@
 </head>
 
 <body>
-  
 
-<nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="197">
+
+<nav class="navbar navbar-inverse">
     <ul class="nav navbar-nav">
     <li class="active"><a href="http://jonathan.sv.hs-mannheim.de/~n.gensheimer/home.html">CNR Group</a></li>
     <li><a href="Secure Messenger.html">Home</a></li>
@@ -26,6 +26,7 @@
         </ul>
     </li>
     </ul>
+          <p class="navbar-text" id="navtext">Logged in as "Username"</p>
     <ul class="nav navbar-nav navbar-right">
       <li><a data-toggle="modal" data-target="#signUpModal"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       <li><a data-toggle="modal" data-target="#logInModal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -95,12 +96,12 @@
 </div>
 </div>
 
-<div class="container" id="imgdiv">
-    <img align="right" src="logo.png" id="logo"/>
-    <h1>You have to Login first!</h1>
-</div>
-
- <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation"   style="float:right">
+<div class="row" id="chatbox">
+  <div class="col-md-8">
+      <canvas id="myCanvas" width="1250" height="750" style="border:1px solid #000000;">
+</canvas>
+  </div>
+  <div class="col-md-6 col-md-3 sidebar-offcanvas" id="sidebar" role="navigation"   style="float:right">
       <div class="well sidebar-nav">
         <ul class="contacts">
           <li><strong>Select a contact</strong></li>
@@ -115,9 +116,21 @@
         </ul>
       </div><!--/.well -->
     </div><!--/span-->
-  </div><!--/row-->
+</div>
+
+<div class="container" id="imgdiv">
+    <img align="right" src="logo.png" id="logo"/>
+    <h1>You have to Login first!</h1>
+</div>
 
 
+
+  <div class="container-fluid" id="input">
+      <div class="input-group">
+          <textarea class="form-control send-message" placeholder="type in your message!" id="msginput"></textarea>
+          <span class="input-group-addon btn btn-primary">Send</span>
+      </div>
+  </div>
 
 </body>
 </html>

@@ -10,4 +10,7 @@ function loginBtn() {
     hideStuff('imgdiv');
     showStuff('sidebar');
     showStuff('menu');
+    showStuff('navtext');
+    showStuff('input')
 }
+
