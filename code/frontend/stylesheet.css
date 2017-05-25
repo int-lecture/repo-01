@@ -56,4 +56,6 @@
      display: none;
 }
 
-
+#chatbox {
+    display: none;
+}

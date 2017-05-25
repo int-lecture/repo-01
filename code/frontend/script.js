@@ -11,6 +11,7 @@ function loginBtn() {
     showStuff('sidebar');
     showStuff('menu');
     showStuff('navtext');
-    showStuff('input')
+    showStuff('input');
+    showStuff('chatbox');
 }
 
