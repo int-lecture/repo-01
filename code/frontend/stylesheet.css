@@ -49,13 +49,6 @@
 }
 
 
-#input {
-     position: absolute;
-     bottom: 0;
-     left: 0;
-     display: none;
-}
-
 #chatbox {
     display: none;
 }
@@ -63,3 +56,14 @@
 #lgout {
     display: none;
 }
+
+#fbprofile {
+    height: 500px;
+    width: 500px;
+}
+
+.panel-body {
+    overflow-y: scroll;
+    height: 750px;
+}
+

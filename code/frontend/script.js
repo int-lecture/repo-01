@@ -6,6 +6,7 @@ function showStuff(id) {
     document.getElementById(id).style.display = 'block';
 }
 
+
 function loginBtn() {
     hideStuff('imgdiv');
     showStuff('sidebar');
@@ -17,4 +18,6 @@ function loginBtn() {
     hideStuff('sgnup');
     showStuff('lgout')
 }
+
+
 

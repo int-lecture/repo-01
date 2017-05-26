@@ -98,26 +98,43 @@
 </div>
 </div>
 
-<div class="row" id="chatbox">
-  <div class="col-md-8">
-      <canvas id="myCanvas" width="1250" height="750" style="border:1px solid #000000;">
-</canvas>
-  </div>
-  <div class="col-md-6 col-md-3 sidebar-offcanvas" id="sidebar" role="navigation"   style="float:right">
-      <div class="well sidebar-nav">
-        <ul class="contacts">
-          <li><strong>Select a contact</strong></li>
-          <li class="active"><a href="#">Kontakt 1</a></li>
-          <li><a href="#">Kontakt 2</a></li>
-          <li><a href="#">Kontakt 3</a></li>
-          <li><a href="#">Kontakt 4</a></li>
-          <li><a href="#">Kontakt 5</a></li>
-          <li><a href="#">Kontakt 6</a></li>
-          <li><a href="#">Kontakt 7</a></li>
-        </ul>
-      </div><!--/.well -->
-    </div><!--/span-->
-</div>
+<div class="row">
+    <div class="col-md-9" id="chatbox">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p>You are chatting with ...</p>
+            </div>
+            <div class="panel-body">
+                BLABLABLABLA
+            </div>
+            <div class="panel-footer">
+                <div class="input-group">
+                      <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                      <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" id="btn-chat">
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 sidebar-offcanvas" id="sidebar">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <p>Contacts</p>
+          </div>
+          <div class="panel-body">
+              <p>Contact 1</p>
+              <p>Contact 2</p>
+              <p>Contact 3</p>
+              <p>Contact 4</p>
+              <p>Contact 5</p>
+              <p>Contact 6</p>
+          </div>
+      </div>
+
+    </div>
 
 <div class="container" id="imgdiv">
     <img align="right" src="logo.png" id="logo"/>
@@ -127,17 +144,23 @@
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="profilmodal">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      ...
+    <div class="row">
+    <div class="col-md-8">
+      <img src="fbprofile.jpg" alt="profilpic" id="fbprofile"/>
+    </div>
+    <div class="col-md-4">
+      <h3>Nutzername</h3>
+      <h3>Email</h3>
+      <h3>Telefonnummer</h3>
+      <h3>Persönliches</h3>
+    </div>
+    </div>
     </div>
   </div>
 </div>
 
-  <div class="container-fluid" id="input">
-      <div class="input-group">
-          <textarea class="form-control send-message" placeholder="type in your message!" id="msginput"></textarea>
-          <span class="input-group-addon btn btn-primary">Send</span>
-      </div>
-  </div>
+<div class="row" id="input"></div>
+
 
 </body>
 </html>
