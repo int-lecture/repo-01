@@ -13,5 +13,8 @@ function loginBtn() {
     showStuff('navtext');
     showStuff('input');
     showStuff('chatbox');
+    hideStuff('lgin');
+    hideStuff('sgnup');
+    showStuff('lgout')
 }
 

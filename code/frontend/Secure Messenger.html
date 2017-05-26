@@ -20,7 +20,7 @@
     <li class ="dropdown" id="menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li><a href="#">Profil</a></li>
+            <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profil</a></li>
             <li><a href="#">Kontakte</a></li>
             <li><a href="#">Einstellungen</a></li>
         </ul>
@@ -28,8 +28,9 @@
     </ul>
           <p class="navbar-text" id="navtext">Logged in as "Username"</p>
     <ul class="nav navbar-nav navbar-right">
-      <li><a data-toggle="modal" data-target="#signUpModal"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a data-toggle="modal" data-target="#logInModal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a data-toggle="modal" data-target="#signUpModal" id="sgnup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a data-toggle="modal" data-target="#logInModal" id="lgin"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a id="lgout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
 </nav>
 
@@ -62,7 +63,8 @@
     </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Sign Up!</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
       
@@ -112,7 +114,6 @@
           <li><a href="#">Kontakt 5</a></li>
           <li><a href="#">Kontakt 6</a></li>
           <li><a href="#">Kontakt 7</a></li>
-
         </ul>
       </div><!--/.well -->
     </div><!--/span-->
@@ -123,7 +124,13 @@
     <h1>You have to Login first!</h1>
 </div>
 
-
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="profilmodal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      ...
+    </div>
+  </div>
+</div>
 
   <div class="container-fluid" id="input">
       <div class="input-group">
