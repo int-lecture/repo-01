@@ -105,7 +105,7 @@ public class RegistrationServer
 			collection.find(and(eq("user",user),eq("pseudonym",pseudonym)))
 	         .forEach((Block<Document>) e -> documents.add(e));
 
-			if (!documents.isEmpty())
+			if (documents.isEmpty())
 			{
 
 				collection.insertOne(new Profile(pseudonym, user, secPassword).toDocument());
@@ -143,13 +143,15 @@ public class RegistrationServer
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getProfile(String request)
 	{
+		System.out.println("test");
 
-		 MongoCollection<Document> collection = database.getCollection("profiles");
-		 List<Document> documents = new ArrayList<>();
+		MongoCollection<Document> collection = database.getCollection("profiles");
+		List<Document> documents = new ArrayList<>();
+		
 		try
 		{
 			JSONObject jsonObj = new JSONObject(request);
-			String nickname = jsonObj.getString("name");
+			String nickname = jsonObj.getString("getownprofile");
 			String token = jsonObj.getString("token"); // TODO: validate token
 
 			collection.find(eq("pseudonym",nickname))
