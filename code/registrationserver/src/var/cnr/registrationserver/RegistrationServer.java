@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.PseudoColumnUsage;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,9 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.sun.grizzly.http.SelectorThread;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 
 
@@ -42,6 +48,9 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 @Path("")
 public class RegistrationServer
 {
+	/** String for date parsing in ISO 8601 format. */
+	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
 	private static final String MONGO_URL = "mongodb://141.19.142.55:27017";
 
 	 /** URI to the MongoDB instance. */
@@ -151,7 +160,12 @@ public class RegistrationServer
 		{
 			JSONObject jsonObj = new JSONObject(request);
 			String nickname = jsonObj.getString("getownprofile");
-			String token = jsonObj.getString("token"); // TODO: validate token
+			String token = jsonObj.getString("token");
+
+			if (!validateToken(token, nickname))
+			{
+				return Response.status(Response.Status.UNAUTHORIZED).build();
+			}
 
 			collection.find(eq("pseudonym",nickname))
 	         .forEach((Block<Document>) e -> documents.add(e));
@@ -170,6 +184,47 @@ public class RegistrationServer
 		{
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
+	}
+
+	private synchronized boolean validateToken(String token, String nickname)
+	{
+		JSONObject obj = new JSONObject();
+		try
+		{
+			obj.put("token", token);
+			obj.put("pseudonym", nickname);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+
+		Client client = new Client();
+		WebResource webResource = client.resource("http://141.19.142.57:5001/auth");
+		ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).entity(obj).post(ClientResponse.class);
+	    int status = response.getStatus();
+	    String textEntity = response.getEntity(String.class);
+	    System.out.println(status);
+
+		if (status == 200)
+		{
+			try
+			{
+				JSONObject responseObj = new JSONObject(textEntity);
+				  System.out.println(responseObj.getString("expire-date"));
+
+				if (new SimpleDateFormat(ISO8601).parse(responseObj.getString("expire-date")).after(new Date()))
+				{
+					return true;
+				}
+			}
+			catch (JSONException | ParseException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return false;
 	}
 
 
