@@ -3,6 +3,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="design.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script type="text/javascript" src="smooth.js"></script>
 
@@ -12,16 +14,20 @@
 
 <body style="text-align:center">
 
-	<nav>
 
-		<a title="home.html" href="#home">Home</a>
-		<a title="Produkte.html" href="#produkte">Produkte</a>
-		<a title="Firmenprofil.html" href="#leitung">Über uns</a>
-		<a title="Impressum.html" href="Impressum.html">Impressum</a>
-                <a title="Registrieren.html" href="#reg">Registrieren</a>
-		<a title="chat.php" href="login.php">Zum Chat</a>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+	<ul class="nav navbar-nav navbar-right">
+		<li><a title="home.html" href="#home">Home</a></li>
+		<li><a title="Produkte.html" href="#produkte">Produkte</a></li>
+		<li><a title="Firmenprofil.html" href="#leitung">Über uns</a></li>
+		<li><a title="Impressum.html" href="Impressum.html">Impressum</a></li>
+                <li><a title="Registrieren.html" href="#reg">Registrieren</a></li>
+		<li><a title="chat.php" href="Secure Messenger.html">Zum Chat</a></li>	
+			
+	</ul>
+	</div>
 	</nav>
-
 
 <div class="parallax" id="home">
 </div>
@@ -41,21 +47,28 @@
 
 
 <div style="background-color:#f3f3f3;" class="produktwillkommen" id="produkte">
+	<div class="container-fluid">
+	<div class="row">
 	<h1> Secure Messenger</h1>
 	<hr size="1px" width="30%">
 	<h2> sicher Chatten leicht gemacht </h2>
-
+	</div>
+	<div class="row">
+	<div class="col-md-8">
 	<div class="produktan">
 		<div class="imagedevice">
 		<img src="devices.png"></div>
-
-		<h2><span style="float: left;margin-top: -310px; margin-left: 90px;"> Exklusives Design </span></h2>
-		<h2><span style="float:left; margin-top: -150px; margin-left:220px;">Verschlüsselt</span></h2>
-		<h2><span style="float:right; margin-top: -340px; margin-right:138px;">Einfache bedienung</span></h2>
-		<h2><span style="float:right; margin-top: -207px; margin-right:80px;">Überall erreichbar</span></h2>
 	</div>
-
-
+	</div>
+	<div class="col-md-4">
+		<h2> Exklusives Design</h2>
+		<h2>Verschlüsselt</h2>
+		<h2>Einfache bedienung</h2>
+		<h2>Überall erreichbar</h2>
+	</div>
+	</div>
+	</div>
+</div>
 </div>
 
 	
@@ -63,40 +76,44 @@
 
 
 
-	<h1 id="leitung"> Unsere Geschäftsleitung </h1>
 
-<div class="portfolio">
-	<div class="profil1">
-		
-		<img style="margin-right:30px;"src="profil2.png">
-		<img style="margin-right:30px;" src="profil3.png">
-		<img src="profil4.png"
-    </div>
-	<div class="profilattacch">
-	<ul>
-			<li> Christopher Rotter</li>
-			<li> 22 Jahre</li>
-			<li> ledig</li>
+<div class="row">
+<h1 id="leitung"> Unsere Geschäftsleitung </h1>
+
+	<div class="col-md-4">
+		<img src="profil2.png">
+		<ul id="cnr">
+			<li>Christopher Rotter</li>
+			<li>22 Jahre</li>
+			<li>ledig</li>
 		</ul>
-
-<ul style="margin-right:90px;">
+	</div>
+		<div class="col-md-4">
+		<img style="margin-right:30px;" src="profil3.png">
+                <ul id="cnr">
 			<li> Nico Gensheimer</li>
 			<li> 24 Jahre</li>
 			<li> ledig</li>
 		</ul>
+		</div>
 
-<ul style="margin-right:70px;">
-			<li> Raphael Lubashewski</li>
+		<div class="col-md-4">
+		<img src="profil4.png">
+                <ul id="cnr">
+			<li> Raphael Lubaschewski</li>
 			<li> 20 Jahre</li>
 			<li> ledig</li>
 		</ul>
+		</div>
 
 </div>
-</div>
 
+
+
+<div class="row">
 <div class="parallax2" id="reg">
 <div style="height:600px; background-color:rgba(0,0,0,.7);">
-<h1><span style="text-align:center;color:white;"><br>Jetz den Newsletter<br>abonnieren</span></h1>
+<h1><span style="text-align:center;color:white;"><br>Jetzt den Newsletter<br>abonnieren</span></h1>
 <div class="formschrift">
 <form style="padding-top:10px;" id="loginform" style="color:white;" action="reg.php"  method="post">
 <br>
@@ -106,6 +123,7 @@
 <input type="submit">
 
 </form>
+</div>
 </div>
 </div>
 </div>
