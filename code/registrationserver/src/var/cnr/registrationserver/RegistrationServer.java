@@ -42,7 +42,6 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 @Path("")
 public class RegistrationServer
 {
-
 	private static final String MONGO_URL = "mongodb://141.19.142.55:27017";
 
 	 /** URI to the MongoDB instance. */
