@@ -48,43 +48,10 @@ background-color:black;
 padding-top:100px;
 }
 
-.produktan {
-font-size:30px;
-color:#006400;
-padding-bottom:30px;
-}
-.produktwillkommen {
-margin-bottom: 100px;
-}
 .unsereFirma {
 margin-top: 100px; 
 }
 
-a {
-padding-top:100%;
-padding-bottom:36px;
-padding-right:20px;
-padding-left:20px;
-margin-right:-7px;
-border-color: white;
-border-right-style:solid;
-border-left-style:solid;
-color:white;
-text-decoration:none;
-text-family: Open Sans, Arial;
-}
-a:visited {
-border-color:white;
-}
-a:acitve {
-background-color#fff;
-color:#006400;
-}
-
-a:hover {
-background-color:#fff;
-color:#006400;
-}
 h3 {
 font-family: Open Sans, Arial;
 
@@ -108,53 +75,19 @@ body {
 background-color: white;
 }
 
-nav {
-position:fixed;
-margin-top: -40px;
-background-color: #140e0e;
-display: block;
-min-width:100%;
-padding-top:35px;
-padding-bottom:35px;
-font-size:18px;
-text-align:right;
-margin-right:-30px;
-    }
 
 .pvorstellung {
 float:left;
 margin-left: 25%;
 }
 
-.portfolio {
-
-text-align:center;
-margin-top:100px;
-margin-bottom:-40px;
-}
 
 #profil {
 margin-right: 40px;
 }
 
-.profilattacch {
-margin-right:33%;
-margin-bottom:120px;
-}
 
-ul {
-float:right;
-}
-.produktwillkommen {
-padding-top:40px;
 
-}
-
-.produkt {
-text-align: left;
-float:left;
-margin-left:15%;
- }
 
 
 .parallax {
@@ -175,4 +108,16 @@ background-attachment: fixed;
 background-position: center;
 background-repeat: no-repeat;
 background-size: cover;
+}
+
+#cnr {
+    margin-left: -50px;
+}
+
+#produktpic {
+    float: left;
+}
+
+#produkte {
+padding-bottom: 50px;
 }
