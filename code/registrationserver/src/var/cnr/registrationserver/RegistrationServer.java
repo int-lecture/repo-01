@@ -39,10 +39,11 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
  * A registration server built on the RESTful API that can create and store user profiles.
  * @author Christopher Rotter, Nico Gensheimer, Raphael Lubaschewski
  */
+@Path("")
 public class RegistrationServer
 {
 
-	private static final String MONGO_URL = "mongodb://localhost:27017";
+	private static final String MONGO_URL = "mongodb://141.19.142.55:27017";
 
 	 /** URI to the MongoDB instance. */
     private static MongoClientURI connectionString =
@@ -53,20 +54,6 @@ public class RegistrationServer
 
     /** Mongo database. */
     private static MongoDatabase database = mongoClient.getDatabase("chat");
-	/**
-	 * Contains all registered users' nicknames. Key is email address.
-	 */
-	private static HashMap<String,String> nicknames = new HashMap<>();
-
-	/**
-	 * Contains all registered users' passwords. Key is email address.
-	 */
-	private static HashMap<String,String> passwords = new HashMap<>();
-
-	/**
-	 * Contains all registered users' profiles. Key is nickname.
-	 */
-	private static HashMap<String,Profile> profiles = new HashMap<>();
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
