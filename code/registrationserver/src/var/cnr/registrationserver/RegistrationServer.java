@@ -147,7 +147,7 @@ public class RegistrationServer
 
 		MongoCollection<Document> collection = database.getCollection("profiles");
 		List<Document> documents = new ArrayList<>();
-		
+
 		try
 		{
 			JSONObject jsonObj = new JSONObject(request);
