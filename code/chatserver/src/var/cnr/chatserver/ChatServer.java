@@ -85,7 +85,11 @@ public class ChatServer
 
 		if (!validateToken(token, userId))
 		{
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return Response
+					.status(Response.Status.UNAUTHORIZED)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 
 		Message[] messages;
@@ -99,12 +103,20 @@ public class ChatServer
 
 			if (messages == null)
 			{
-				return Response.status(Response.Status.NO_CONTENT).build();
+				return Response
+						.status(Response.Status.NO_CONTENT)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 		}
 		catch (Exception e)
 		{
-			return Response.status(Response.Status.NO_CONTENT).build();
+			return Response
+					.status(Response.Status.NO_CONTENT)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 
 		Message[] unconfirmedMessages;
@@ -136,7 +148,11 @@ public class ChatServer
 			e.printStackTrace();
 		}
 
-		return Response.status(Response.Status.OK).entity(messagesToJSONArray(messages).toString()).build();
+		return Response
+				.status(Response.Status.OK).entity(messagesToJSONArray(messages).toString())
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+				.build();
 	}
 
 
@@ -160,7 +176,11 @@ public class ChatServer
 
 			if (!validateToken(token, message.getFrom()))
 			{
-				return Response.status(Response.Status.UNAUTHORIZED).build();
+				return Response
+						.status(Response.Status.UNAUTHORIZED)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 
 			String fileName = message.getTo() + ".txt";
@@ -174,12 +194,20 @@ public class ChatServer
 			JSONObject obj = new JSONObject();
 			obj.put("date", message.getDate());
 			obj.put("sequence", message.getSequence());
-			return Response.status(Response.Status.CREATED).entity(obj.toString()).build();
+			return Response
+					.status(Response.Status.CREATED).entity(obj.toString())
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 	}
 

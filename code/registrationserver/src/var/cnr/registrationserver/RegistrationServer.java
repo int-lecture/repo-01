@@ -96,8 +96,6 @@ public class RegistrationServer
 		 MongoCollection<Document> collection = database.getCollection("profiles");
 		 List<Document> documents = new ArrayList<>();
 
-
-
 //			zu testzwecken!
 //			String profiltest = "{ \"user\": \"glatzo\", \"pseudonym\": \"glatze\", \"password\": \"123\"}";
 
@@ -108,7 +106,6 @@ public class RegistrationServer
 			String pseudonym = jsnobj.getString("pseudonym");
 			String password = jsnobj.getString("password");
 			String secPassword = SecurityHelper.hashPassword(password);
-
 
 			collection.find(and(eq("user",user),eq("pseudonym",pseudonym)))
 	         .forEach((Block<Document>) e -> documents.add(e));
@@ -125,18 +122,31 @@ public class RegistrationServer
 			else
 			{
 				//Hier sollte der Statuscode I�m a Teapot 418 gesendet werden laut Aufgabe
-				return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+				return Response
+						.status(Response.Status.NOT_ACCEPTABLE)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 
 		  //Erstelleung des JSON Objekts mit der "Success" Nachricht an den Client
 		  JSONObject obj = new JSONObject();
 		  obj.put("success", "true");
 
-		  return Response.status(Response.Status.OK).entity(obj.toString()).build();
+		  return Response
+				  .status(Response.Status.OK)
+				  .entity(obj.toString())
+				  .header("Access-Control-Allow-Origin", "*")
+				  .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+				  .build();
 		}
 		catch (JSONException | NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 	}
 
@@ -164,7 +174,11 @@ public class RegistrationServer
 
 			if (!validateToken(token, nickname))
 			{
-				return Response.status(Response.Status.UNAUTHORIZED).build();
+				return Response
+						.status(Response.Status.UNAUTHORIZED)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 
 			collection.find(eq("pseudonym",nickname))
@@ -173,16 +187,29 @@ public class RegistrationServer
 			if (!documents.isEmpty())
 			{
 
-				return Response.status(Response.Status.OK).entity(documentToJSONObject(documents).toString()).build();
+				return Response
+						.status(Response.Status.OK)
+						.entity(documentToJSONObject(documents).toString())
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 			else
 			{
-				return Response.status(Response.Status.NO_CONTENT).build();
+				return Response
+						.status(Response.Status.NO_CONTENT)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.build();
 			}
 		}
 		catch (JSONException e)
 		{
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.build();
 		}
 	}
 
