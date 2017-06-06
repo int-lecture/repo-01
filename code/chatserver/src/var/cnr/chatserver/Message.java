@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.Document;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -133,65 +134,46 @@ class Message implements Serializable
     {
         SimpleDateFormat sdf = new SimpleDateFormat(ISO8601);
 
-        return String.format("{ 'from': '%s', 'to': '%s', 'date': '%s', 'text': '%s'}".replace('\'',  '"'),
-                from, to, sdf.format(new Date()), text);
+        return String.format("{ 'from': '%s', 'to': '%s', 'date': '%s', 'text': '%s'}"
+        		.replace('\'',  '"'), from, to, sdf
+        		.format(new Date()), text);
     }
 
-    /**
-     * Serializes this message into a byte array.
-     * @return	A byte array.
-     */
-    public byte[] Serialize()
+    public Document toDocument()
     {
-    	ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    	ObjectOutputStream objStream;
-
-		try
-		{
-			objStream = new ObjectOutputStream(byteStream);
-			objStream.writeObject(this);
-	    	objStream.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-    	return byteStream.toByteArray();
+    	return new Document()
+    			.append("from", from)
+    			.append("to", to)
+    			.append("date", getDate())
+    			.append("text", text)
+    			.append("sequence", sequence);
     }
 
-    /**
-     * Deserializes a byte array into a message.
-     * @param data	The byte array.
-     * @return		The deserialized message.
-     */
-    public static Message Deserialize(byte[] data)
+    public static Message[] documentsToMessages(Document[] documents)
     {
-    	ByteArrayInputStream byteStream = new ByteArrayInputStream(data);
-    	ObjectInputStream objStream;
+    	Message[] messages = new Message[documents.length];
 
-		try
-		{
-			objStream = new ObjectInputStream(byteStream);
-			Message message;
+    	for (int i = 0; i < documents.length; i++)
+    	{
+    		messages[i] = documentToMessage(documents[i]);
+    	}
 
-			try
-			{
-				message = (Message) objStream.readObject();
-				return message;
-			}
-			catch (ClassNotFoundException e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-			finally
-			{
-				objStream.close();
-			}
+    	return messages;
+    }
+
+    private static Message documentToMessage(Document document)
+    {
+    	try
+    	{
+			return new Message(
+					document.getString("from"),
+					document.getString("to"),
+					new SimpleDateFormat(ISO8601).parse(document.getString("date")),
+					document.getString("text"),
+					document.getInteger("sequence"));
 		}
-		catch (IOException e)
-		{
+    	catch (ParseException e)
+    	{
 			e.printStackTrace();
 			return null;
 		}
