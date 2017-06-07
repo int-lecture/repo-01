@@ -1,5 +1,8 @@
 package var.cnr.chatserver;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.text.ParseException;
@@ -13,8 +16,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.bson.Document;
 import org.codehaus.jettison.json.*;
 
+import com.mongodb.Block;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.sun.grizzly.http.SelectorThread;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -28,10 +37,21 @@ import com.sun.jersey.api.container.grizzly.GrizzlyWebContainerFactory;
 @Path("")
 public class ChatServer
 {
+	private static final String MONGO_URL = "mongodb://141.19.142.55:27017";
+
+	 /** URI to the MongoDB instance. */
+    private static MongoClientURI connectionString = new MongoClientURI(MONGO_URL);
+
+    /** Client to be used. */
+    private static MongoClient mongoClient = new MongoClient(connectionString);
+
+    /** Mongo database. */
+    private static MongoDatabase database = mongoClient.getDatabase("chat");
+
 	/**
 	 * Contains the last sequence number for all users.
 	 */
-	private static HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
+	//private static HashMap<String, Integer> userSequenceNumbers = new HashMap<>();
 
 	/**
 	 * The thread lock is used to prevent inconsistent file access through multiple threads.
@@ -94,14 +114,14 @@ public class ChatServer
 
 		Message[] messages;
 
-		try
+		synchronized (threadLock)
 		{
-			synchronized (threadLock)
-			{
-				messages = readFile(userId + ".txt");
-			}
+			MongoCollection<Document> collection = database.getCollection("messages");
+			List<Document> documents = new ArrayList<>();
+			collection.find(eq("user",userId)).forEach((Block<Document>) e -> documents.add(e));
+			messages = Message.documentsToMessages((Document[]) documents.toArray());
 
-			if (messages == null)
+			if (messages.length == 0)
 			{
 				return Response
 						.status(Response.Status.NO_CONTENT)
@@ -109,43 +129,21 @@ public class ChatServer
 						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
 						.build();
 			}
-		}
-		catch (Exception e)
-		{
-			return Response
-					.status(Response.Status.NO_CONTENT)
-					.header("Access-Control-Allow-Origin", "*")
-					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-					.build();
-		}
 
-		Message[] unconfirmedMessages;
+			int sequence = 0;
 
-		if (sequenceNumber != null)
-		{
-			int unconfirmed = messages[messages.length - 1].getSequence() - Integer.parseInt(sequenceNumber);
-			unconfirmedMessages = new Message[unconfirmed];
-
-			for (int i = 0; i < unconfirmedMessages.length; i++)
+			if (sequenceNumber != null)
 			{
-				unconfirmedMessages[i] = messages[messages.length - unconfirmedMessages.length + i];
+				Integer.parseInt(sequenceNumber);
 			}
-		}
-		else
-		{
-			unconfirmedMessages = messages;
-		}
 
-		try
-		{
-			synchronized (threadLock)
+			for (Document document : documents)
 			{
-				writeToFile(userId, unconfirmedMessages);
+				if (document.getInteger("sequence") <= sequence)
+				{
+					collection.deleteOne(document);
+				}
 			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
 		}
 
 		return Response
@@ -183,12 +181,12 @@ public class ChatServer
 						.build();
 			}
 
-			String fileName = message.getTo() + ".txt";
-			message.setSequence(increaseUserSequence(fileName));
-
 			synchronized (threadLock)
 			{
-				writeToFile(fileName, message);
+				message.setSequence(increaseUserSequence( message.getTo()));
+
+				MongoCollection<Document> collection = database.getCollection("messages");
+				collection.insertOne(message.toDocument());
 			}
 
 			JSONObject obj = new JSONObject();
@@ -211,7 +209,7 @@ public class ChatServer
 		}
 	}
 
-	private synchronized boolean validateToken(String token, String nickname)
+	private boolean validateToken(String token, String nickname)
 	{
 		JSONObject obj = new JSONObject();
 		try
@@ -225,7 +223,7 @@ public class ChatServer
 		}
 
 		Client client = new Client();
-		WebResource webResource = client.resource("http://141.19.142.57:5001/auth");
+		WebResource webResource = client.resource("http://141.19.142.55:5001/auth");
 		ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).entity(obj).post(ClientResponse.class);
 	    int status = response.getStatus();
 	    String textEntity = response.getEntity(String.class);
@@ -277,110 +275,26 @@ public class ChatServer
 	}
 
 	/**
-	 * Reads a file if it exists, converts the data to messages and returns them. The file is then deleted.
-	 * @param fileName		The name of the file.
-	 * @return				An array of messages or null if the file doesn't exist.
-	 * @throws IOException	Thrown when the file can't be read.
-	 */
-	private Message[] readFile(String fileName) throws IOException
-	{
-		File file = new File(fileName);
-
-		if (file.exists())
-		{
-			byte[] countBytes = new byte[4];
-			FileInputStream inStream = new FileInputStream(fileName);
-			inStream.read(countBytes, 0, 4);
-			int count = ByteBuffer.wrap(countBytes).getInt();
-			byte[][] messageBytes = new byte[count][];
-			Message[] messages = new Message[count];
-
-			for (int i = 0; i < count; i++)
-			{
-				byte[] messageLengthBytes = new byte[4];
-				inStream.read(messageLengthBytes, 0, 4);
-				int messageLength = ByteBuffer.wrap(messageLengthBytes).getInt();
-				messageBytes[i] = new byte[messageLength];
-				inStream.read(messageBytes[i], 0, messageLength);
-
-				messages[i] = Message.Deserialize(messageBytes[i]);
-			}
-
-			inStream.close();
-			file.delete();
-
-			return messages;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * Writes messages into a file. If the file already exists, the messages will be appended.
-	 * @param fileName		The name of the file.
-	 * @param messages		An array of messages.
-	 * @throws IOException	Thrown when the file can't be written.
-	 */
-	private void writeToFile(String fileName, Message... messages) throws IOException
-	{
-
-		File file = new File(fileName);
-		Message[] existingMessages = new Message[0];
-
-		if (file.exists())
-		{
-			existingMessages = readFile(fileName);
-		}
-
-		int count = messages.length + existingMessages.length;
-		int[] messageLengths = new int[count];
-		byte[][] messageBytes = new byte[count][];
-
-		for (int i = 0; i < existingMessages.length; i++)
-		{
-			messageBytes[i] = existingMessages[i].Serialize();
-			messageLengths[i] = messageBytes[i].length;
-		}
-
-		for (int i = existingMessages.length; i < count; i++)
-		{
-			messageBytes[i] = messages[i - existingMessages.length].Serialize();
-			messageLengths[i] = messageBytes[i].length;
-		}
-
-		FileOutputStream outStream = new FileOutputStream(fileName);
-		byte[] countBytes = ByteBuffer.allocate(4).putInt(count).array();
-		outStream.write(countBytes);
-
-		for (int i = 0; i < count; i++)
-		{
-			byte[] messageLengthBytes = ByteBuffer.allocate(4).putInt(messageLengths[i]).array();
-			outStream.write(messageLengthBytes);
-			outStream.write(messageBytes[i]);
-		}
-
-		outStream.close();
-	}
-
-	/**
 	 * Increases the sequence number of a user and returns the previous sequence number.
 	 * @param userId		The id of the user.
 	 * @return				The last sequence number.
 	 */
-	private synchronized int increaseUserSequence(String userId)
+	private int increaseUserSequence(String userId)
 	{
-		if (userSequenceNumbers.containsKey(userId))
+		int sequence = 0;
+
+		MongoCollection<Document> collection = database.getCollection("userSequences");
+		List<Document> documents = new ArrayList<>();
+		collection.find(eq("user",userId)).forEach((Block<Document>) e -> documents.add(e));
+
+		if (!documents.isEmpty())
 		{
-			int seq = userSequenceNumbers.get(userId);
-			userSequenceNumbers.put(userId, seq + 1);
-			return seq;
+			Document first = documents.get(0);
+			sequence = first.getInteger("sequence");
+			collection.deleteOne(first);
 		}
-		else
-		{
-			userSequenceNumbers.put(userId, 1);
-			return 0;
-		}
+
+		collection.insertOne(new Document().append("user", userId).append("sequence", sequence + 1));
+		return sequence;
 	}
 }
