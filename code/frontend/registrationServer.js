@@ -1,8 +1,8 @@
-$( document ).ready(function() {  
+$( document ).ready(function() {
 	
 });
 
-function registerUser(){
+function registerUser() {
 
 
 	
