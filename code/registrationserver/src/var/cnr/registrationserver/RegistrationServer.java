@@ -125,7 +125,7 @@ public class RegistrationServer
 				return Response
 						.status(Response.Status.NOT_ACCEPTABLE)
 						.header("Access-Control-Allow-Origin", "*")
-						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 						.build();
 			}
 
@@ -137,7 +137,7 @@ public class RegistrationServer
 				  .status(Response.Status.OK)
 				  .entity(obj.toString())
 				  .header("Access-Control-Allow-Origin", "*")
-				  .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+				  .header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 				  .build();
 		}
 		catch (JSONException | NoSuchAlgorithmException | InvalidKeySpecException e)
@@ -145,7 +145,7 @@ public class RegistrationServer
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.header("Access-Control-Allow-Origin", "*")
-					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 					.build();
 		}
 	}
@@ -177,7 +177,7 @@ public class RegistrationServer
 				return Response
 						.status(Response.Status.UNAUTHORIZED)
 						.header("Access-Control-Allow-Origin", "*")
-						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 						.build();
 			}
 
@@ -191,7 +191,7 @@ public class RegistrationServer
 						.status(Response.Status.OK)
 						.entity(documentToJSONObject(documents).toString())
 						.header("Access-Control-Allow-Origin", "*")
-						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 						.build();
 			}
 			else
@@ -199,7 +199,7 @@ public class RegistrationServer
 				return Response
 						.status(Response.Status.NO_CONTENT)
 						.header("Access-Control-Allow-Origin", "*")
-						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 						.build();
 			}
 		}
@@ -208,7 +208,7 @@ public class RegistrationServer
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.header("Access-Control-Allow-Origin", "*")
-					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, DELETE, PUT")
 					.build();
 		}
 	}
