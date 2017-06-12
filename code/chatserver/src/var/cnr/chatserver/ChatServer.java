@@ -60,7 +60,7 @@ public class ChatServer
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
-		final String baseUri = "http://localhost:5000/";
+		final String baseUri = "http://localhost:" + args[0] + "/";
 		final String packageName = "var.cnr.chatserver";
 		final Map<String, String> initParams = new HashMap<String, String>();
 		initParams.put("com.sun.jersey.config.property.packages", packageName);
