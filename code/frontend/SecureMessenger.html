@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="script.js" async></script>
+<script src="registrationServer.js" async></script>
+<script src="loginServer.js" async></script>
+<script src="chatServer.js" async></script>
+<link rel="stylesheet" href="stylesheet.css">
+</head>
+
+<body>
+
+<div class="row">
+    <nav class="navbar navbar-inverse">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <div class="col-sm-9">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="home.html">CNR Group</a></li>
+                <li><a href="home.html#produkte">Home</a></li>
+				<li><button class="btn btn-default btn-sm" id="testchatbtn" onclick="recieveMessages()">test
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </button></li>
+                <li class ="dropdown" id="menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profil</a></li>
+                    <li><a href="#">Kontakte</a></li>
+                    <li><a href="#">Einstellungen</a></li>
+                </ul>
+                </li>
+            <p class="navbar-text" id="navtext">Logged in as "Username"</p>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a data-toggle="modal" data-target="#signUpModal" id="sgnup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a data-toggle="modal" data-target="#logInModal" id="lgin"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a id="lgout" href="SecureMessenger.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="signUpModal" role="dialog">
+    <div class="modal-dialog">    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <img src="logo.png" alt="logo" />
+	        <h1>Secure Messenger</h1>
+        </div>
+        <div class="modal-body">
+	        <h4>Sign Up!</h4>
+            <div class="form-group">
+                <form onsubmit="registerUser();">
+      		    <label for="usr">Email:</label>
+      		    <input type="text" class="form-control" id="usr">
+                <br>
+                <label for="nm">Name:</label>
+		        <input type="text" class="form-control" id="nm">
+                <br>
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd">
+                <div class="modal-footer">
+                <input type="submit" class="btn btn-default" id="signup" value="Sign Up"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+                </form>
+    	  </div>
+
+
+        </div>
+      </div>
+      
+    </div>
+</div>
+
+<div class="modal fade" id=logInModal role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <img src="logo.png" alt="logo" />
+        <h1>Secure Messenger</h1>
+      </div>
+      <div class="modal-body">
+        <h4>Login!</h4>
+        <div class="form-group">
+            <form onsubmit="return loginUser();">
+   	            <label for="nm">Name:</label>
+	            <input type="text" class="form-control" id="nm2">
+	    </div>
+      <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd2">
+      </div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-default" value="Login" id="loginbtn" />
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+            </form>
+
+  </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="col-md-9" id="chatbox">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p>You are chatting with ...</p>
+            </div>
+            <div class="panel-body">
+                BLABLABLABLA
+            </div>
+            <div class="panel-footer">
+                <div class="input-group">
+                      <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                      <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" id="btn-chat">
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 sidebar-offcanvas" id="sidebar">
+        <div class="container-fluid">
+
+        </div>
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <p>Contacts</p>
+          </div>
+          <div class="panel-body">
+              <p>Contact 1</p>
+              <p>Contact 2</p>
+              <p>Contact 3</p>
+              <p>Contact 4</p>
+              <p>Contact 5</p>
+              <p>Contact 6</p>
+          </div>
+      </div>
+
+    </div>
+
+<div class="container" id="imgdiv">
+    <img align="right" src="logo.png" id="logo"/>
+    <h1>You have to Login first!</h1>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="profilmodal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="row">
+    <div class="col-md-8">
+      <img src="fbprofile.jpg" alt="profilpic" id="fbprofile"/>
+    </div>
+    <div class="col-md-4">
+      <h3>Nutzername</h3>
+      <h3>Email</h3>
+      <h3>Telefonnummer</h3>
+      <h3>Persönliches</h3>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="input"></div>
+
+
+</body>
+</html>
