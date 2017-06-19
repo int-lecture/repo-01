@@ -1,15 +1,23 @@
 package var.cnr.chatserver;
 
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +25,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.bson.Document;
-import org.codehaus.jettison.json.*;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -60,7 +70,7 @@ public class ChatServer
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
-		final String baseUri = "http://localhost:" + args[0] + "/";
+		final String baseUri = "http://localhost:5000/"; //+ args[0] + "/";
 		final String packageName = "var.cnr.chatserver";
 		final Map<String, String> initParams = new HashMap<String, String>();
 		initParams.put("com.sun.jersey.config.property.packages", packageName);
@@ -259,7 +269,7 @@ public class ChatServer
 		}
 
 		Client client = new Client();
-		WebResource webResource = client.resource("http://141.19.142.55:5001/auth");
+		WebResource webResource = client.resource("http://141.19.142.57:5001/auth");
 		ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).entity(obj).post(ClientResponse.class);
 	    int status = response.getStatus();
 	    String textEntity = response.getEntity(String.class);

@@ -6,6 +6,14 @@ $(document).ready(function () {
 
 
 
+function getToken(){
+	var token = readCookie("token");
+	if(!token){
+		console.log("bitte melde dich an");
+	}
+	return token;
+}
+
 
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
@@ -46,4 +54,29 @@ function readCookie() {
             pseudonym = value.substring("pseudonym=".length);
         }
     });
+}
+
+function sendMessage() {
+	var message = $("#message").val();
+	var myJSON = {
+		"token":getToken(),
+		"from":readCookie("pseudonym"),
+		"date":"2017-06-19T12:36:30+0200",
+		"to":"nico"
+		"text":message
+	};
+
+	$.ajax({
+		url: "http://141.19.142.55:5000/send",
+		type: "PUT",
+		contentType: "application/json; charset=utf-8",
+		dataType:"json",
+		data: JSON.stringify(myJSON),
+		succes : function(response){
+			alert(message);
+		},
+		error : function(xhr,status,error) {
+			alert("fehler");
+		}
+	});	
 }
