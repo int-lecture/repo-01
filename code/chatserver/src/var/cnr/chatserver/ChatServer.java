@@ -70,7 +70,8 @@ public class ChatServer
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException
 	{
-		final String baseUri = "http://localhost:5000/"; //+ args[0] + "/";
+		System.out.println(new SimpleDateFormat(Message.ISO8601).format(new Date()));
+		final String baseUri = "http://localhost:" + args[0] + "/";
 		final String packageName = "var.cnr.chatserver";
 		final Map<String, String> initParams = new HashMap<String, String>();
 		initParams.put("com.sun.jersey.config.property.packages", packageName);
@@ -87,7 +88,8 @@ public class ChatServer
 
     @OPTIONS
     @Path("/send")
-    public Response optionsReg() {
+    public Response optionsReg()
+    {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
@@ -99,7 +101,8 @@ public class ChatServer
 
     @OPTIONS
     @Path("/messages/{userid}/{sequenceNumber}")
-    public Response optionsProfileWithSeqNumber() {
+    public Response optionsProfileWithSeqNumber()
+    {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
@@ -111,7 +114,8 @@ public class ChatServer
 
     @OPTIONS
     @Path("/messages/{userid}")
-    public Response optionsProfile() {
+    public Response optionsProfile()
+    {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
@@ -119,7 +123,7 @@ public class ChatServer
                 .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .header("Access-Control-Max-Age", "1209600")
                 .build();
-}
+    }
 
 	/**
 	 * Retrieves all available messages for a user, sends them to the client and deletes them.
