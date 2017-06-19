@@ -273,7 +273,7 @@ public class ChatServer
 		}
 
 		Client client = new Client();
-		WebResource webResource = client.resource("http://141.19.142.57:5001/auth");
+		WebResource webResource = client.resource("http://141.19.142.55:5001/auth");
 		ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).entity(obj).post(ClientResponse.class);
 	    int status = response.getStatus();
 	    String textEntity = response.getEntity(String.class);
