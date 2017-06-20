@@ -169,7 +169,7 @@ public class ChatServer
 			MongoCollection<Document> collection = database.getCollection("messages");
 			List<Document> documents = new ArrayList<>();
 			collection.find(eq("user",userId)).forEach((Block<Document>) e -> documents.add(e));
-			messages = Message.documentsToMessages((Document[]) documents.toArray());
+			messages = Message.documentsToMessages(documents.toArray(new Document[documents.size()]));
 
 			if (messages.length == 0)
 			{
