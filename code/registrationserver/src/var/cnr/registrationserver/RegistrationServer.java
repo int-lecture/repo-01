@@ -160,7 +160,7 @@ public class RegistrationServer
 	}
 
 	@OPTIONS
-    @Path("/register")
+    @Path("/profile")
     public Response optionsProfile()
     {
         return Response.ok("")
