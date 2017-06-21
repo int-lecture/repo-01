@@ -35,8 +35,8 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profil</a></li>
-                    <li><a href="#">Kontakte</a></li>
-                    <li><a href="#">Einstellungen</a></li>
+                    <li><a href="#">Contacts</a></li>
+                    <li><a data-toggle="modal" data-target="#settingsModal" href="#">Settings</a></li>
                 </ul>
                 </li>
             <p class="navbar-text" id="navtext">Logged in as "Username"</p>
@@ -105,7 +105,7 @@
       <div class="modal-body">
         <h4>Login!</h4>
         <div class="form-group">
-            <form onsubmit="return loginUser();">
+//            <form onsubmit="return loginUser();">
    	            <label for="nm">Name:</label>
 	            <input type="text" class="form-control" id="nm2">
 	    </div>
@@ -115,13 +115,39 @@
       </div>
     </div>
     <div class="modal-footer">
-        <input type="submit" class="btn btn-default" value="Login" id="loginbtn" />
+        <input class="btn btn-default" value="Login" id="loginbtn" onclick="loginBtn()"/>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
-            </form>
+//            </form>
 
   </div>
 </div>
+</div>
+
+<div class="modal fade" id="settingsModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1>Settings</h1>
+            </div>
+            <div class="modal-body">
+                <h2>Server Config</h2>
+                <form onsubmit="">
+                    <div class="form-group">
+                    <label>ChatServer IP</label>
+                    <input type="text" class="form-control" id="chatIP" value="141.19.142.55:5000">
+                    </br>
+                    <label>LoginServer IP</label>
+                    <input type="text" class="form-control" id="logIP" value="141.19.142.55:5001">
+                    </br>
+                    <label>RegistrationServer IP</label>
+                    <input type="text" class="form-control" id="regIP" value="141.19.142.55:5002">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
