@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -75,6 +76,19 @@ public class RegistrationServer
 		SelectorThread threadSelector = GrizzlyWebContainerFactory.create(baseUri, initParams);
 		System.out.printf("Grizzly läuft unter %s%n", baseUri);
 	}
+
+	@OPTIONS
+    @Path("/register")
+    public Response optionsRegister()
+    {
+        return Response.ok("")
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Max-Age", "1209600")
+                .build();
+    }
 
 	/**
 	 * Registers a new user if the nickname doesn't already exist.
@@ -144,6 +158,19 @@ public class RegistrationServer
 					.build();
 		}
 	}
+
+	@OPTIONS
+    @Path("/register")
+    public Response optionsProfile()
+    {
+        return Response.ok("")
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Max-Age", "1209600")
+                .build();
+    }
 
 	/**
 	 * Retrieves the own profile of the user who requests it, if the token is valid.

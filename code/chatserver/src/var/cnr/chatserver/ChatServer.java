@@ -83,7 +83,7 @@ public class ChatServer
 
     @OPTIONS
     @Path("/send")
-    public Response optionsReg()
+    public Response optionsSend()
     {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
@@ -96,7 +96,7 @@ public class ChatServer
 
     @OPTIONS
     @Path("/messages/{userid}/{sequenceNumber}")
-    public Response optionsProfileWithSeqNumber()
+    public Response optionsMessagesWithSeqNumber()
     {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
@@ -109,7 +109,7 @@ public class ChatServer
 
     @OPTIONS
     @Path("/messages/{userid}")
-    public Response optionsProfile()
+    public Response optionsMessages()
     {
         return Response.ok("")
                 .header("Access-Control-Allow-Origin", "*")
