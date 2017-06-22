@@ -2,11 +2,13 @@ $( document ).ready(function() {
 	
 });
 
+var regIP = getRegisterIP();
+
 function registerUser() {
 
 
 	
-	var URL = "http://141.19.142.55:5002/register/";
+	var URL = regIP + "/register/";
 	var jeisohnObj = {'pseudonym': $("#nm").val(), 'user': $("#usr").val(), 'password': $("#pwd").val() };
 
         alert(JSON.stringify(jeisohnObj));

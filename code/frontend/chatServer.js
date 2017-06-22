@@ -3,7 +3,7 @@ $(document).ready(function () {
 	readCookie()
 	});
 
-
+var chatIP = getChatIP();
 
 
 function getToken(){
@@ -17,7 +17,7 @@ function getToken(){
 
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
-	var URL = "http://141.19.142.55:5001/messages/" + pseudonym;
+	var URL = chatIP + "/messages/" + pseudonym;
 	
 	     $.ajax({
             headers: {
@@ -67,7 +67,7 @@ function sendMessage() {
 	};
 
 	$.ajax({
-		url: "http://141.19.142.55:5000/send",
+		url: chatIP + "/send",
 		type: "PUT",
 		contentType: "application/json; charset=utf-8",
 		dataType:"json",

@@ -1,12 +1,14 @@
-var chatIP;
-var logIP;
-var regIP;
+function getChatIP() {
 
-function getIPs() {
-    chatIP = Document.getElementById("#chatIP").value;
-    logIP = Document.getElementById("#logIP").value;
-    regIP = Document.getElementById("#regIP").value;
-    var ips = [chatIP, logIP, regIP];
-
-    return ips;
+    return Document.getElementByID("#chatIP").value;
 }
+
+function getLoginIP() {
+    return Document.getElementByID("#logIP").value;
+}
+
+function getRegisterIP() {
+    return Document.getElementByID("#regIP").value;
+
+}
+

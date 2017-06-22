@@ -28,6 +28,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="home.html">CNR Group</a></li>
                 <li><a href="home.html#produkte">Home</a></li>
+		<li><a data-toggle="modal" data-target="#settingsModal"href="#">Settings</a></li>
 				<li><button class="btn btn-default btn-sm" id="testchatbtn" onclick="recieveMessages()">test
                                 <span class="glyphicon glyphicon-triangle-right"></span>
                             </button></li>
@@ -36,7 +37,6 @@
                 <ul class="dropdown-menu">
                     <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profil</a></li>
                     <li><a href="#">Contacts</a></li>
-                    <li><a data-toggle="modal" data-target="#settingsModal" href="#">Settings</a></li>
                 </ul>
                 </li>
             <p class="navbar-text" id="navtext">Logged in as "Username"</p>
@@ -115,7 +115,7 @@
       </div>
     </div>
     <div class="modal-footer">
-        <input type="submit" class="btn btn-default" value="Login" id="loginbtn" />
+        <input class="btn btn-default" value="Login" id="loginbtn" onclick="loginBtn()"/>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
             </form>
@@ -133,7 +133,7 @@
             </div>
             <div class="modal-body">
                 <h2>Server Config</h2>
-                <form onsubmit="">
+                <form>
                     <div class="form-group">
                     <label>ChatServer IP</label>
                     <input type="text" class="form-control" id="chatIP" value="141.19.142.55:5000">
@@ -146,6 +146,9 @@
                     </div>
                 </form>
             </div>
+	    <div class="modal-footer">
+		<input type="submit" class="btn btn-default" data-dismiss="modal" value="Change">
+	    </div>	
         </div>
     </div>
 </div>

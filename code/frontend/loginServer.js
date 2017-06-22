@@ -39,10 +39,9 @@ $( document ).ready(function() {
 readCookie();
 });
 
-var ip="141.19.142.55";
-function loginUser(){
-    ip="141.19.142.55";
-	var URL = "http://"+ip+":5001/login";
+
+function loginUser() {
+	var URL = "http://"+getLoginIP()+"/login";
 	var dataObject = {'user': $("#nm2").val(), 'password': $("#pwd2").val()};
 	
         alert(JSON.stringify(dataObject));
