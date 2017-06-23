@@ -141,7 +141,7 @@ public class ChatServer
 	 * @return					A HTTP response with all available messages in JSON format attached.
 	 */
 	@GET
-	@Path("/messages/{user_id}/{sequene_number}")
+	@Path("/messages/{user_id}/{sequence_number}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessages(@PathParam("user_id") String userId, @PathParam("sequence_number") String sequenceNumber, @Context HttpHeaders header)
 	{
