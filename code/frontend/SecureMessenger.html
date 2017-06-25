@@ -160,15 +160,16 @@
             <div class="panel-heading">
                 <p id="chattingwith"></p>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" id="chatbody">
             </div>
             <div class="panel-footer">
                 <div class="input-group">
-                      <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." / id="message">
+                      <input type="text" class="form-control input-sm" placeholder="Type in your message here..." id="message"/>
                       <span class="input-group-btn">
                             <button class="btn btn-default btn-sm" id="btn-chat" onclick="sendMessage()">
                                 <span class="glyphicon glyphicon-triangle-right"></span>
                             </button>
+                      </span>
                 </div>
             </div>
         </div>
@@ -180,10 +181,15 @@
         </div>
       <div class="panel panel-default">
           <div class="panel-heading">
-              <form onsubmit="return chattingWith();">
+              <div class="input-group">
                   <input type="text" class="form-control" placeholder="search for contacts..." id="csearch">
-                  <input type="submit" style="position: absolute; left: -9999px"/>
-              </form>
+                  <span class="input-group-btn">
+                      <button class="btn btn-default" onclick="chattingWith()">
+                          <span class="glyphicon glyphicon-search "></span>
+                      </button>
+                  </span>
+              </div>
+
           </div>
           <div class="panel-body">
               <p>Contact 1</p>

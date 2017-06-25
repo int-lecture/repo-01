@@ -55,11 +55,11 @@ function readCookie() {
 }
 
 function sendMessage() {
-	var message = $("#message").val();
+	var message = document.getElementById("message").value;
 	var myJSON = {
 		"token":getToken(),
 		"from":readCookie("pseudonym"),
-		"date":"2017-06-19T12:36:30+0200",
+		"date":getDate(),
 		"to":document.getElementById("csearch").value,
 		"text":message
 	};
@@ -72,9 +72,23 @@ function sendMessage() {
 		data: JSON.stringify(myJSON),
 		succes : function(response){
 			alert(message);
+            printMessage(readCookie("pseudonym"), message, getDate());
+
 		},
 		error : function(xhr,status,error) {
 			alert("fehler");
 		}
 	});	
+}
+
+function printMessage(name, message, date) {
+    $("#chatbody").append(date+" " + name + ": " + message);
+    document.getElementById("message").value = "";
+
+}
+
+function getDate() {
+    var d = new Date();
+	var stringDate = d.getFullYear() + "-" + ((d.getMonth() + 1) < 10 ? "0" + (d.getMonth() + 1) : (d.getMonth() + 1)) + "-" + ((d.getDate()) < 10 ? "0" + (d.getDate()) : (d.getDate())) + "T" + (d.getHours() < 10 ? "0" + d.getHours() : d.getHours()) + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + ((d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds())) + "+0200";
+    return stringDate;
 }
