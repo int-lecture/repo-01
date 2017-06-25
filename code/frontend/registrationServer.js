@@ -2,13 +2,12 @@ $( document ).ready(function() {
 	
 });
 
-var regIP = getRegisterIP();
 
 function registerUser() {
 
 
 	
-	var URL = regIP + "/register/";
+	var URL = getRegisterIP() + "/register/";
 	var jeisohnObj = {'pseudonym': $("#nm").val(), 'user': $("#usr").val(), 'password': $("#pwd").val() };
 
         alert(JSON.stringify(jeisohnObj));

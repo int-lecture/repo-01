@@ -1,14 +1,18 @@
 function getChatIP() {
-
-    return Document.getElementByID("#chatIP").value;
+    return document.getElementById("chatIP").value;
 }
 
 function getLoginIP() {
-    return Document.getElementByID("#logIP").value;
+    return document.getElementById("logIP").value;
 }
 
 function getRegisterIP() {
-    return Document.getElementByID("#regIP").value;
+    return document.getElementById("regIP").value;
 
+}
+
+function test() {
+    var bla = document.getElementById("regIP").value;
+    alert(bla);
 }
 

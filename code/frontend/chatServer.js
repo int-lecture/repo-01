@@ -3,8 +3,6 @@ $(document).ready(function () {
 	readCookie()
 	});
 
-var chatIP = getChatIP();
-
 
 function getToken(){
 	var token = readCookie("token");
@@ -17,7 +15,7 @@ function getToken(){
 
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
-	var URL = chatIP + "/messages/" + pseudonym;
+	var URL = getChatIP() + "/messages/" + pseudonym;
 	
 	     $.ajax({
             headers: {
