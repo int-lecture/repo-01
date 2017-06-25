@@ -10,7 +10,6 @@
 <script src="registrationServer.js" async></script>
 <script src="loginServer.js" async></script>
 <script src="chatServer.js" async></script>
-<script src="config.js" asynch></script>
 <link rel="stylesheet" href="stylesheet.css">
 </head>
 
@@ -29,18 +28,18 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="home.html">CNR Group</a></li>
                 <li><a href="home.html#produkte">Home</a></li>
-		<li><a data-toggle="modal" data-target="#settingsModal"href="#">Settings</a></li>
+		<li><a data-toggle="modal" data-target="#settingsModal"href="#" id="sModal">Settings</a></li>
 				<li><button class="btn btn-default btn-sm" id="testchatbtn" onclick="recieveMessages()">test
                                 <span class="glyphicon glyphicon-triangle-right"></span>
                             </button></li>
                 <li class ="dropdown" id="menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menü<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profil</a></li>
+                    <li data-toggle="modal" data-target="#profilmodal"><a href="#">Profile</a></li>
                     <li><a href="#">Contacts</a></li>
                 </ul>
                 </li>
-            <p class="navbar-text" id="navtext">Logged in as "Username"</p>
+            <p class="navbar-text" id="navtext">Logged in as </p>
             </ul>
         </div>
     </div>
@@ -116,7 +115,7 @@
       </div>
     </div>
     <div class="modal-footer">
-        <input type="submit" class="btn btn-default" value="Login" id="loginbtn"/>
+        <input class="btn btn-default" value="Login" id="loginbtn" onclick="loginBtn()"/>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
             </form>
@@ -158,10 +157,9 @@
     <div class="col-md-9" id="chatbox">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <p>You are chatting with ...</p>
+                <p id="chattingwith"></p>
             </div>
             <div class="panel-body">
-                BLABLABLABLA
             </div>
             <div class="panel-footer">
                 <div class="input-group">
@@ -181,7 +179,10 @@
         </div>
       <div class="panel panel-default">
           <div class="panel-heading">
-              <p>Contacts</p>
+              <form onsubmit="return chattingWith();">
+                  <input type="text" class="form-control" placeholder="search for contacts..." id="csearch">
+                  <input type="submit" style="position: absolute; left: -9999px"/>
+              </form>
           </div>
           <div class="panel-body">
               <p>Contact 1</p>

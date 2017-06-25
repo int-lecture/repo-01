@@ -19,6 +19,10 @@ function loginBtn() {
     showStuff('lgout')
 }
 
+function chattingWith() {
+    document.getElementById("chattingwith").innerHTML = "You are chatting with " + document.getElementById("csearch").value;
+}
+
 
 
 

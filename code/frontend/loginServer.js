@@ -89,7 +89,8 @@ function loginBtn() {
     showStuff('chatbox');
     hideStuff('lgin');
     hideStuff('sgnup');
-    showStuff('lgout')
+    showStuff('lgout');
+    hideStuff('sModal');
 }
 
 function readCookie() {
@@ -105,3 +106,23 @@ function readCookie() {
         }
     });
 }
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+document.getElementById("navtext").innerHTML="You are logged in as " + getCookie("pseudonym");
+
+

@@ -60,7 +60,7 @@ function sendMessage() {
 		"token":getToken(),
 		"from":readCookie("pseudonym"),
 		"date":"2017-06-19T12:36:30+0200",
-		"to":"nico"
+		"to":document.getElementById("csearch").value,
 		"text":message
 	};
 
