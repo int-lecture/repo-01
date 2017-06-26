@@ -10,7 +10,7 @@ var sequenceNumber = 0;
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
 	readCookie();	
-	var URL = "http://141.19.142.55:5000/messages/" + pseudonym + "/" + sequenceNumber;
+	var URL = getChatIP() +"/messages/" + pseudonym + "/" + sequenceNumber;
 		
 	
 	     $.ajax({
@@ -73,7 +73,7 @@ function sendMessage() {
 		"token":token,
 		"from":pseudonym,
 		"date":getMyDate(),
-		"to":"nico",
+		"to":document.getElementById("csearch").value,
 		"text":message
 	};
 
@@ -99,6 +99,12 @@ function getMyDate() {
     var date = new Date();
     var stringDate = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())) + "T" + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + ((date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds())) + "+0200";
     return stringDate;
+}
+
+function printMessage(name, message, date) {
+    $("#chatbody").append(date+" " + name + ": " + message);
+    document.getElementById("message").value = "";
+
 }
 
 
