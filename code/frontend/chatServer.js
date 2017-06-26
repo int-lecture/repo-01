@@ -1,16 +1,18 @@
 $(document).ready(function () {
-
 	readCookie()
-	});
+		
+});
 
 
 
 var sequenceNumber = 0;
 
+
+
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
 	readCookie();	
-	var URL = getChatIP() +"/messages/" + pseudonym + "/" + sequenceNumber;
+	var URL = "http://141.19.142.55:5000/messages/" + pseudonym + "/" + sequenceNumber;
 		
 	
 	     $.ajax({
@@ -32,11 +34,11 @@ function recieveMessages (){
 						 }
 					});
 					sequenceNumber = result[result.length -1].sequence;
-					alert(URL);
+					
 					
             },
 			complete : function(result){
-			alert(JSON.stringify(result));
+			
 			
 					
 					
@@ -44,12 +46,13 @@ function recieveMessages (){
 		},
             error: function (xhr, a, b) {
             	alert("Leider ist da etwas schief gelaufen :(\nBeim abrufen Ihrer Nachricht gab es einen Fehler : " + xhr.status + ".\n Loggen Sie sich erneut ein.");
-                alert(URL);
+                
 		alert(token);
                 //alert("getMessages von " + pseudonym + " fehlgeschlagen");
             }
 
         });
+	setTimeout(recieveMessages,1000)
 }
 
 
@@ -68,12 +71,13 @@ function readCookie() {
 }
 function sendMessage() {
 	readCookie();
-	var message = $("#btn-input").val();
+	var chatPartner = $("#csearch").val();
+	var message = $("#message").val();
 	var myJSON = {
 		"token":token,
 		"from":pseudonym,
 		"date":getMyDate(),
-		"to":document.getElementById("csearch").value,
+		"to":chatPartner,
 		"text":message
 	};
 
@@ -89,7 +93,7 @@ function sendMessage() {
 			
 		},
 		error : function(xhr,status,error) {
-			alert(JSON.stringify(myJSON));
+			
 		}
 	});	
 }
@@ -99,12 +103,6 @@ function getMyDate() {
     var date = new Date();
     var stringDate = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())) + "T" + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + ((date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds())) + "+0200";
     return stringDate;
-}
-
-function printMessage(name, message, date) {
-    $("#chatbody").append(date+" " + name + ": " + message);
-    document.getElementById("message").value = "";
-
 }
 
 

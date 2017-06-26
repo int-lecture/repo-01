@@ -8,6 +8,7 @@ function showStuff(id) {
 
 
 function loginBtn() {
+	
     hideStuff('imgdiv');
     showStuff('sidebar');
     showStuff('menu');
@@ -21,9 +22,6 @@ function loginBtn() {
 
 function chattingWith() {
     document.getElementById("chattingwith").innerHTML = "You are chatting with " + document.getElementById("csearch").value;
+	recieveMessages();
 }
-
-
-
-
 

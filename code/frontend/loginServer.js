@@ -1,17 +1,12 @@
 /*
-
 $( document ).ready(function() {  
 	
 });
-
 $('#loginbtn').bind('click', function() {
-
  var ip="141.19.142.55";
 	var URL = "http://"+ip+":5001/login/";
 	var dataObject = {'user': $("#nm2").val(), 'password': $("pwd2#").val()};
-
         alert(JSON.stringify(dataObject));
-
         $.ajax({
 			url: URL,
 			type: 'POST',    
@@ -29,11 +24,7 @@ $('#loginbtn').bind('click', function() {
 			}
   	});
 	return false;
-
-
-
 });
-
 */
 $( document ).ready(function() {  
 readCookie();
@@ -124,5 +115,4 @@ function getCookie(cname) {
 }
 
 document.getElementById("navtext").innerHTML="You are logged in as " + getCookie("pseudonym");
-
 
