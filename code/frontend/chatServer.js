@@ -1,21 +1,17 @@
 $(document).ready(function () {
-	
+
 	readCookie()
 	});
 
 
-function getToken(){
-	var token = readCookie("token");
-	if(!token){
-		console.log("bitte melde dich an");
-	}
-	return token;
-}
 
+var sequenceNumber = 0;
 
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
-	var URL = getChatIP() + "/messages/" + pseudonym;
+	readCookie();	
+	var URL = "http://141.19.142.55:5000/messages/" + pseudonym + "/" + sequenceNumber;
+		
 	
 	     $.ajax({
             headers: {
@@ -24,15 +20,32 @@ function recieveMessages (){
             url: URL,
             type: 'GET',
             contentType: "application/json; charset=utf-8",
-            dataType: 'json',
+			dataType: 'json',
             success: function (result, textStatus, xhr) {
 					//code
-					alert(result.from);
-					alert(result.to);
+					$.each(result,function(index, value){
+						 if (value.sequence != sequenceNumber) {
+            
+      
+					// alert('My array has at position ' + index + ', this value: ' + value.to);
+					$("ol").append("<li style='background-color:red;'>"+"erhalten von " +value.from+": "+value.text+"</li>");
+						 }
+					});
+					sequenceNumber = result[result.length -1].sequence;
+					alert(URL);
+					
             },
+			complete : function(result){
+			alert(JSON.stringify(result));
+			
+					
+					
+			
+		},
             error: function (xhr, a, b) {
             	alert("Leider ist da etwas schief gelaufen :(\nBeim abrufen Ihrer Nachricht gab es einen Fehler : " + xhr.status + ".\n Loggen Sie sich erneut ein.");
-                
+                alert(URL);
+		alert(token);
                 //alert("getMessages von " + pseudonym + " fehlgeschlagen");
             }
 
@@ -53,42 +66,39 @@ function readCookie() {
         }
     });
 }
-
 function sendMessage() {
-	var message = document.getElementById("message").value;
+	readCookie();
+	var message = $("#btn-input").val();
 	var myJSON = {
-		"token":getToken(),
-		"from":readCookie("pseudonym"),
-		"date":getDate(),
-		"to":document.getElementById("csearch").value,
+		"token":token,
+		"from":pseudonym,
+		"date":getMyDate(),
+		"to":"nico",
 		"text":message
 	};
 
 	$.ajax({
-		url: chatIP + "/send",
+		url: "http://141.19.142.55:5000/send",
 		type: "PUT",
 		contentType: "application/json; charset=utf-8",
 		dataType:"json",
+		async:false,
 		data: JSON.stringify(myJSON),
-		succes : function(response){
-			alert(message);
-            printMessage(readCookie("pseudonym"), message, getDate());
-
+		complete : function(response){
+			$("ol").append("<li style='background-color:lightgreen;'>"+getMyDate()+": "+message+"</li>");
+			
 		},
 		error : function(xhr,status,error) {
-			alert("fehler");
+			alert(JSON.stringify(myJSON));
 		}
 	});	
 }
 
-function printMessage(name, message, date) {
-    $("#chatbody").append(date+" " + name + ": " + message);
-    document.getElementById("message").value = "";
 
-}
-
-function getDate() {
-    var d = new Date();
-	var stringDate = d.getFullYear() + "-" + ((d.getMonth() + 1) < 10 ? "0" + (d.getMonth() + 1) : (d.getMonth() + 1)) + "-" + ((d.getDate()) < 10 ? "0" + (d.getDate()) : (d.getDate())) + "T" + (d.getHours() < 10 ? "0" + d.getHours() : d.getHours()) + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + ((d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds())) + "+0200";
+function getMyDate() {
+    var date = new Date();
+    var stringDate = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())) + "T" + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + ((date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds())) + "+0200";
     return stringDate;
 }
+
+
