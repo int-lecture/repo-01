@@ -12,8 +12,8 @@ var sequenceNumber = 0;
 function recieveMessages (){
 	//Code für das erhalten der nicht gelesenen Nachrichten
 	readCookie();	
-	var URL = "http://141.19.142.55:5000/messages/" + pseudonym + "/" + sequenceNumber;
-		
+
+	 var URL = "http://"+getChatIP()+"/messages/" + pseudonym + "/" + sequenceNumber;
 	
 	     $.ajax({
             headers: {
@@ -80,22 +80,26 @@ function sendMessage() {
 		"to":chatPartner,
 		"text":message
 	};
-
+	if(chatPartner == ""){
+	alert("Bitte gib deinen Chat Partner an! ESC zum Beenden!!");
+	}else{
 	$.ajax({
-		url: "http://141.19.142.55:5000/send",
+		url: "http://"+getChatIP()+"/send",
 		type: "PUT",
 		contentType: "application/json; charset=utf-8",
 		dataType:"json",
 		async:false,
 		data: JSON.stringify(myJSON),
-		complete : function(response){
+		success : function(response){
 			$("ol").append("<li style='background-color:lightgreen;'>"+getMyDate()+": "+message+"</li>");
-			
+			document.getElementById("message").value = "";	
 		},
 		error : function(xhr,status,error) {
 			
 		}
 	});	
+	}	
+	
 }
 
 

@@ -35,8 +35,6 @@ function loginUser() {
 	var URL = "http://"+getLoginIP()+"/login";
 	var dataObject = {'user': $("#nm2").val(), 'password': $("#pwd2").val()};
 	
-        alert(JSON.stringify(dataObject));
-
         $.ajax({
 			url: URL,
 			method: 'POST',    
@@ -47,9 +45,6 @@ function loginUser() {
 				document.cookie = "token="+result.token;
 				document.cookie="pseudonym="+result.pseudonym+";expires="+result["expire-date"];
 				document.getElementById("navtext").innerHTML = "Logged in as "+pseudonym;
-				alert("success?");
-				alert(document.cookie);
-				alert(pseudonym);
 				loginBtn();	
 //				window.location.href = "SecureMessenger.html";
 			},

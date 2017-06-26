@@ -25,3 +25,8 @@ function chattingWith() {
 	recieveMessages();
 }
 
+$("#message").keyup(function(event){
+if(event.keyCode == 13){
+	$("#btn-chat").click();
+}
+});
